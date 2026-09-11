@@ -26,16 +26,17 @@ notebook-portfolio/
 │   ├── head.html  markup.html  styles.css   the page around the script
 │   ├── order.json                           the load order, and the only copy of it
 │   └── js/01-core.js … 18-boot.js           one concern per file
-├── tools/build.js         src/ → the one page that ships
+├── tools/build.js         src/ → index.html, the one page that ships
 ├── tools/check.js         the standing checks
 ├── starters/              notebooks to import and build on
-├── notebook-portfolio.html   BUILT — do not edit by hand
+├── index.html             BUILT — do not edit by hand (index.html because
+│                          that is what GitHub Pages serves from the root)
 ├── docs/notebook-format.md
 ├── README.md
 └── CLAUDE.md              this file
 ```
 
-**`notebook-portfolio.html` is generated.** Edit `src/`, run `npm run build`, commit both.
+**`index.html` is generated.** Edit `src/`, run `npm run build`, commit both.
 `npm run build -- --check` fails if the built page is stale. The split was made by cutting the
 old single file at its section banners and proving the rebuild came back **byte-identical**; if
 you ever restructure it again, do the same.
@@ -154,6 +155,17 @@ written changes face.
 **`new Date(26, …)` is 1926.** JavaScript maps years 0–99 into the 1900s. Worse, the year was a
 number field updating on every keystroke, so typing "2026" was evaluated as 2, then 20, then
 202. A month is now picked whole with `<input type="month">` and parsed as `YYYY-MM`.
+
+### Away from Claude
+
+**`claude.use()` resolving `null` is not an error, it is a place.** Opened from a folder or off
+GitHub Pages there is no host to publish into. `HOSTLESS` turns Save into **Export**, and the
+save indicator says "not saved here" rather than leaving it to be discovered. Everything else —
+every tool, print, the standalone export — works untouched.
+
+**A hostless page still exports a standalone copy**, because `pageSource()` fetches
+`location.href`, which is a real file there. That is the only way photographs survive a reload
+outside Claude: the local draft drops `blob:` URLs, which are dead after a reload anyway.
 
 ### Paper and theme
 

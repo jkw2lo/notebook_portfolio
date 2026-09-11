@@ -12,7 +12,7 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
-const FILE = path.join(__dirname, "..", "notebook-portfolio.html");
+const FILE = path.join(__dirname, "..", "index.html");
 const html = fs.readFileSync(FILE, "utf8");
 
 let bad = 0;

@@ -63,6 +63,15 @@ function adopt(d){
     return;
   }
   CAP = await use("artifact");
-  if (!CAP) $("#b-save").hidden = true;
+  if (!CAP){
+    /* served as an ordinary web page: there is nothing to publish into,
+       so Save becomes the thing that actually keeps the work */
+    HOSTLESS = true;
+    const b = $("#b-save");
+    b.hidden = false; b.disabled = false; b.textContent = "↓ Export";
+    b.title = "Save a standalone copy — this page cannot publish";
+    b.onclick = exportStandalone;
+    dirty(true);
+  }
   if (!loaded) toast("Double-click the page to write. Press P for the pen. Drop photos anywhere.", 5200);
 })();

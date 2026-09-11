@@ -5,7 +5,7 @@
  * rewriting its own source, so there is nothing to fetch alongside it.
  * The source is split for reading; this puts it back together.
  *
- *   node tools/build.js              # writes notebook-portfolio.html
+ *   node tools/build.js              # writes index.html
  *   node tools/build.js --check      # builds and diffs, changes nothing
  *
  * Load order lives in src/order.json and nowhere else. Every file
@@ -18,7 +18,9 @@ const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
 const SRC = path.join(ROOT, "src");
-const OUT = path.join(ROOT, "notebook-portfolio.html");
+/* index.html, not a pretty name: GitHub Pages serves the repo root and
+   looks for exactly this. */
+const OUT = path.join(ROOT, "index.html");
 
 const read = p => fs.readFileSync(path.join(SRC, p), "utf8");
 const order = JSON.parse(read("order.json"));
@@ -38,12 +40,12 @@ const page = read("head.html")
 
 if (process.argv.includes("--check")) {
   const have = fs.existsSync(OUT) ? fs.readFileSync(OUT, "utf8") : "";
-  if (have === page) { console.log("notebook-portfolio.html is up to date."); process.exit(0); }
-  console.log("notebook-portfolio.html is STALE — run: node tools/build.js");
+  if (have === page) { console.log("index.html is up to date."); process.exit(0); }
+  console.log("index.html is STALE — run: node tools/build.js");
   console.log(`  built ${page.length} bytes, on disk ${have.length}`);
   process.exit(1);
 }
 
 fs.writeFileSync(OUT, page);
-console.log(`Built notebook-portfolio.html — ${(page.length/1024).toFixed(1)} KB` +
+console.log(`Built index.html — ${(page.length/1024).toFixed(1)} KB` +
   ` from ${order.length} scripts, ${read("styles.css").length.toLocaleString()} bytes of CSS.`);

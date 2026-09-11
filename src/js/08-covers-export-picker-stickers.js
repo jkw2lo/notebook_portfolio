@@ -240,7 +240,7 @@ const DOODLE_EXTRA = {
 Object.assign(DOODLES, DOODLE_EXTRA);
 
 /* ── state ──────────────────────────────────────────────────── */
-let NB = null, CAP = null, RO = false, DIRTY = false;
+let NB = null, CAP = null, RO = false, DIRTY = false, HOSTLESS = false;
 let SI = 0, PI = 0, SEL = new Set(), PRESENT = false, TOOL = "select";
 const BLOBS = new Map();   /* id → Blob still to be published */
 const KEEP  = new Map();   /* id → Blob already published, URL still live here */
@@ -265,6 +265,10 @@ function dirty(on){
   b.innerHTML = DIRTY ? '<span class="dot"></span>Save' : "✓ Saved";
   b.disabled = !DIRTY || RO;
   const w = $("#savedat");
+  if (HOSTLESS){                    /* opened as a plain web page, not in Claude */
+    w.hidden = false; w.textContent = "not saved here — Export keeps it";
+    return;
+  }
   if (!DIRTY){ dirty.at = new Date(); w.hidden = false;
     w.textContent = "saved " + dirty.at.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
   } else if (dirty.at){ w.hidden = false; w.textContent = "unsaved changes"; }

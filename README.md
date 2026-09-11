@@ -4,9 +4,16 @@ A junk journal you build on facing pages. Drop photographs anywhere, write strai
 paper, stick tape and tickets and pressed ephemera over the top, and read the whole thing back
 as a bound book — or print it, or hand someone a single file that opens as a finished portfolio.
 
-What ships is one static page with no dependencies and nothing to fetch — open
-`notebook-portfolio.html` and it works. The source is split for reading; `npm run build` puts it
-back into that single file.
+**[Open it →](https://jkw2lo.github.io/notebook_portfolio/)**
+
+What ships is one static page with no dependencies and nothing to fetch — open `index.html` and
+it works, from a folder or from a web server. The source is split for reading; `npm run build`
+puts it back into that single file.
+
+> The page is built to `index.html` because that is what GitHub Pages serves from the repo
+> root. Pages has to be switched on in **Settings → Pages → Deploy from a branch → main /
+> (root)**, and on a **private** repo it needs a paid plan — make the repo public if the link
+> above does not come up.
 
 ## What it is
 
@@ -70,6 +77,7 @@ there is nothing to fetch alongside it. So `src/` is the source and
 
 | File | What it owns |
 |---|---|
+| `index.html` | **built** — do not edit; `npm run build` writes it |
 | `src/head.html`, `src/markup.html` | the title, the fonts, and the page's own elements |
 | `src/styles.css` | both palettes, every block's look, the print rules |
 | `src/js/01-core.js` | helpers, colours, page sizes, the papers |
@@ -110,6 +118,23 @@ early, a `prompt()` that the sandbox swallows. Run it before publishing.
 
 Read [CLAUDE.md](CLAUDE.md) before changing anything. It is the rulebook, and most of it exists
 because the obvious approach quietly did not work.
+
+## Where it runs, and what that changes
+
+The same page behaves differently depending on where it is opened, because saving is the only
+thing that needs a host.
+
+| | In Claude | On GitHub Pages, or a local file |
+|---|---|---|
+| Make a notebook | yes | yes |
+| **Save** | writes itself as a new version | nothing to publish into — the button becomes **↓ Export** |
+| Survives a reload | yes | the text does, from a local draft; **photographs do not** |
+| Export JSON / standalone | yes | yes — and the standalone copy embeds the photographs |
+| Print / PDF | yes | yes |
+
+So the hosted link is the place to *try* it and to read a standalone copy someone sent you; the
+artifact is where a notebook actually lives. On the hosted page the save indicator says so
+rather than leaving you to find out.
 
 ## Saving, and the one thing to be careful about
 
