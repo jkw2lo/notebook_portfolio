@@ -1,0 +1,263 @@
+{
+ "title": "Field notes",
+ "version": 3,
+ "kit": "Ledger",
+ "bind": "spread",
+ "gutter": 56,
+ "spine": "stitch",
+ "gutterShade": true,
+ "nums": true,
+ "anim": true,
+ "rulers": false,
+ "stenOn": true,
+ "stenSnap": true,
+ "stencils": [],
+ "readonly": false,
+ "sections": [
+  {
+   "id": "s00o",
+   "name": "Daily",
+   "color": "#6B6320",
+   "pages": [
+    {
+     "id": "s00y",
+     "name": "A day",
+     "size": "land",
+     "paper": "graph",
+     "sten": null,
+     "blocks": [
+      {
+       "id": "s00p",
+       "t": "date",
+       "x": 80,
+       "y": 56,
+       "w": 210,
+       "h": 74,
+       "rot": 0,
+       "fmt": "iso",
+       "style": "strip",
+       "font": "courier",
+       "size": 18,
+       "color": "#3F3A32"
+      },
+      {
+       "id": "s00q",
+       "t": "mood",
+       "x": 330,
+       "y": 66,
+       "w": 230,
+       "h": 40,
+       "rot": 0,
+       "kind": "weather",
+       "pick": -1,
+       "title": "",
+       "color": "#3F3A32"
+      },
+      {
+       "id": "s00r",
+       "t": "time",
+       "x": 80,
+       "y": 160,
+       "w": 84,
+       "h": 560,
+       "rot": 0,
+       "from": 7,
+       "to": 20,
+       "color": "#8A8175"
+      },
+      {
+       "id": "s00s",
+       "t": "text",
+       "x": 196,
+       "y": 160,
+       "w": 520,
+       "h": 0,
+       "rot": 0,
+       "text": "Beside the hours: what actually happened, not what was planned.",
+       "role": "body",
+       "align": "left"
+      },
+      {
+       "id": "s00t",
+       "t": "stitch",
+       "x": 196,
+       "y": 700,
+       "w": 520,
+       "h": 0,
+       "rot": 0,
+       "color": "#8A8175",
+       "weight": 1.5
+      },
+      {
+       "id": "s00u",
+       "t": "track",
+       "x": 760,
+       "y": 160,
+       "w": 420,
+       "h": 150,
+       "rot": 0,
+       "title": "This week",
+       "rows": [
+        "Draft",
+        "Cut",
+        "Stitch"
+       ],
+       "cols": 14,
+       "on": [],
+       "color": "#3F5A46"
+      },
+      {
+       "id": "s00v",
+       "t": "check",
+       "x": 760,
+       "y": 340,
+       "w": 420,
+       "h": 150,
+       "rot": 0,
+       "items": [
+        [
+         0,
+         "First thing"
+        ],
+        [
+         0,
+         "Then"
+        ],
+        [
+         0,
+         "If there is time"
+        ]
+       ],
+       "size": 15
+      },
+      {
+       "id": "s00w",
+       "t": "spec",
+       "x": 760,
+       "y": 520,
+       "w": 420,
+       "h": 0,
+       "rot": 0,
+       "title": "Measured",
+       "rows": [
+        [
+         "",
+         ""
+        ],
+        [
+         "",
+         ""
+        ],
+        [
+         "",
+         ""
+        ]
+       ]
+      },
+      {
+       "id": "s00x",
+       "t": "text",
+       "x": 196,
+       "y": 716,
+       "w": 520,
+       "h": 0,
+       "rot": 0,
+       "text": "carried over",
+       "role": "label",
+       "align": "left"
+      }
+     ]
+    },
+    {
+     "id": "s015",
+     "name": "Looking at",
+     "size": "land",
+     "paper": "dot",
+     "sten": null,
+     "blocks": [
+      {
+       "id": "s00z",
+       "t": "text",
+       "x": 80,
+       "y": 60,
+       "w": 520,
+       "h": 0,
+       "rot": 0,
+       "text": "Looking at",
+       "role": "title",
+       "align": "left"
+      },
+      {
+       "id": "s010",
+       "t": "shape",
+       "x": 80,
+       "y": 130,
+       "w": 520,
+       "h": 400,
+       "rot": 0,
+       "kind": "rect",
+       "color": "#FFFFFF",
+       "radius": 2,
+       "fill": "none",
+       "stroke": "#B4AE9E",
+       "strokeW": 2,
+       "dash": "dashed"
+      },
+      {
+       "id": "s011",
+       "t": "text",
+       "x": 80,
+       "y": 552,
+       "w": 520,
+       "h": 0,
+       "rot": 0,
+       "text": "Draw here — press P for the pen.",
+       "role": "caption",
+       "align": "left"
+      },
+      {
+       "id": "s012",
+       "t": "photo",
+       "x": 660,
+       "y": 130,
+       "w": 520,
+       "h": 390,
+       "rot": 0,
+       "src": null,
+       "natW": 4,
+       "natH": 3,
+       "fit": "cover",
+       "frame": "mat",
+       "radius": 2,
+       "caption": ""
+      },
+      {
+       "id": "s013",
+       "t": "text",
+       "x": 660,
+       "y": 552,
+       "w": 520,
+       "h": 0,
+       "rot": 0,
+       "text": "and what it actually looked like",
+       "role": "subtitle",
+       "align": "left"
+      },
+      {
+       "id": "s014",
+       "t": "quote",
+       "x": 80,
+       "y": 660,
+       "w": 1100,
+       "h": 64,
+       "rot": 0,
+       "text": "Measure twice.",
+       "by": "",
+       "color": "#4A453D"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

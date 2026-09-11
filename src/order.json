@@ -1,0 +1,20 @@
+[
+  "01-core.js",
+  "02-tape-and-journal.js",
+  "03-stencils-rulers-layouts.js",
+  "04-type-stickers-dates.js",
+  "05-book-spreads.js",
+  "06-reading-and-export.js",
+  "07-typekits-cover-lock-objects.js",
+  "08-covers-export-picker-stickers.js",
+  "09-modals.js",
+  "10-render.js",
+  "11-tool-rail.js",
+  "12-canvas.js",
+  "13-photographs.js",
+  "14-sections-and-pages.js",
+  "15-reading-mode.js",
+  "16-help.js",
+  "17-save.js",
+  "18-boot.js"
+]

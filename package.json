@@ -1,12 +1,14 @@
 {
-  "name": "plate-and-bleed",
+  "name": "notebook-portfolio",
   "version": "1.0.0",
   "description": "A junk-journal notebook you build on facing pages — scrapbook, field notes, or portfolio.",
-  "repository": { "type": "git", "url": "https://github.com/jkw2lo/plate-and-bleed.git" },
+  "repository": { "type": "git", "url": "https://github.com/jkw2lo/notebook-portfolio.git" },
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "python3 -m http.server 8732",
-    "check": "node tools/check.js"
+    "build": "node tools/build.js",
+    "check": "node tools/build.js --check && node tools/check.js",
+    "starters": "node tools/make-starters.js",
+    "start": "python3 -m http.server 8732"
   }
 }

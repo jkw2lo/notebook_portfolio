@@ -1,7 +1,7 @@
-# Plate & Bleed — working notes
+# Notebook Portfolio — working notes
 
 A junk-journal notebook that runs as one static page with no build step and no dependencies:
-open `plate-and-bleed.html` and it works.
+open `notebook-portfolio.html` and it works.
 
 **Read this before changing anything.** Almost every rule below exists because the obvious
 approach broke the page *silently* — no error in the console, just a control that did nothing
@@ -21,13 +21,24 @@ hand-placing fast, never to take it over.
 ## Layout
 
 ```
-plate-and-bleed/
-├── plate-and-bleed.html   the whole app — markup, styles and script in one file
-├── tools/check.js         the standing checks (npm run check)
-├── docs/                  notes
-├── README.md              what it is and how to use it
+notebook-portfolio/
+├── src/
+│   ├── head.html  markup.html  styles.css   the page around the script
+│   ├── order.json                           the load order, and the only copy of it
+│   └── js/01-core.js … 18-boot.js           one concern per file
+├── tools/build.js         src/ → the one page that ships
+├── tools/check.js         the standing checks
+├── starters/              notebooks to import and build on
+├── notebook-portfolio.html   BUILT — do not edit by hand
+├── docs/notebook-format.md
+├── README.md
 └── CLAUDE.md              this file
 ```
+
+**`notebook-portfolio.html` is generated.** Edit `src/`, run `npm run build`, commit both.
+`npm run build -- --check` fails if the built page is stale. The split was made by cutting the
+old single file at its section banners and proving the rebuild came back **byte-identical**; if
+you ever restructure it again, do the same.
 
 `seed` in the repo copy is `null` on purpose — see **Publishing** below.
 
@@ -175,9 +186,9 @@ Ask her to **save before requesting changes**, so the merge picks up her latest.
 
 ## Deliberate decisions
 
-- **One file.** The page publishes and saves itself, so there is nothing to assemble. Splitting
-  into `src/*.js` needs a small inliner first; it is the obvious next move and nothing depends
-  on it staying this way.
+- **One file ships; the source is split.** The page saves itself by rewriting its own source,
+  so what publishes must be a single document with nothing to fetch. `tools/build.js` is the
+  whole build: concatenate in `src/order.json` order, wrap, write. No bundler, no transpile.
 - **No libraries.** Nothing is loaded from a CDN. Everything — paper, stickers, borders, seals,
   page turning — is CSS and inline SVG.
 - **The standalone export is the same page** with `readonly` set in the seed, not a second
@@ -190,7 +201,6 @@ Ask her to **save before requesting changes**, so the merge picks up her latest.
 
 ## Ideas not yet built
 
-- Splitting the file, with an inliner for publishing.
 - Moving a page from one section to another (re-ordering within a section works).
 - Rich text inside a block — bold and italic are per block today.
 - A back cover that knows it is the back, so Read mode can end on it.

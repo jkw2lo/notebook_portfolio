@@ -1,11 +1,12 @@
-# Plate & Bleed
+# Notebook Portfolio
 
 A junk journal you build on facing pages. Drop photographs anywhere, write straight onto the
 paper, stick tape and tickets and pressed ephemera over the top, and read the whole thing back
 as a bound book — or print it, or hand someone a single file that opens as a finished portfolio.
 
-It is one static page. No build step, no dependencies, no server — open
-`plate-and-bleed.html` and it works.
+What ships is one static page with no dependencies and nothing to fetch — open
+`notebook-portfolio.html` and it works. The source is split for reading; `npm run build` puts it
+back into that single file.
 
 ## What it is
 
@@ -63,31 +64,44 @@ about.
 
 ## Where things live
 
-It is a single file, and that is deliberate for now: the page publishes and saves *itself*, so
-there is nothing to assemble. Inside, it reads top to bottom in sections:
+The published page **has** to be one file — it saves itself by rewriting its own source, so
+there is nothing to fetch alongside it. So `src/` is the source and
+`notebook-portfolio.html` is built from it and committed.
 
-| Section | What it owns |
+| File | What it owns |
 |---|---|
-| tokens & CSS | the two palettes, every block's look, print rules |
-| tape, journal blocks, stamps | patterned washi, hour columns, months, habit grids |
-| stencils, rulers, layouts | the shaded plan layer and the layout gallery |
-| faces, stickers, doodles, dates | the type list, 87 stickers, 28 marks, date formats |
-| the book | spreads, gutter, binding, page numbers |
-| reading & export | page turning, printing, the standalone copy |
-| type, cover, locking, objects | kits and roles, cover materials, the object list |
-| modals | the in-page dialogs — `prompt()` does not work in the frame |
-| render / tool rail / canvas | drawing, the contextual toolbar, every pointer gesture |
-| photographs, pages, save, boot | images, section and page handling, publishing, startup |
+| `src/head.html`, `src/markup.html` | the title, the fonts, and the page's own elements |
+| `src/styles.css` | both palettes, every block's look, the print rules |
+| `src/js/01-core.js` | helpers, colours, page sizes, the papers |
+| `src/js/02-tape-and-journal.js` | patterned washi, hour columns, months, habit grids, stamps |
+| `src/js/03-stencils-rulers-layouts.js` | the shaded plan layer, rulers, the layout gallery |
+| `src/js/04-type-stickers-dates.js` | the faces, 87 stickers, 28 marks, date formats, ephemera |
+| `src/js/05-book-spreads.js` | spreads, gutter, binding, page numbers |
+| `src/js/06-reading-and-export.js` | page turning, printing, the standalone copy |
+| `src/js/07-typekits-cover-lock-objects.js` | kits and roles, covers, locking, the object list |
+| `src/js/08-covers-export-picker-stickers.js` | covers as pages, the export chooser, borders |
+| `src/js/09-modals.js` | the in-page dialogs — `prompt()` does not work in the frame |
+| `src/js/10-render.js` | `drawAll`, the page and block drawing |
+| `src/js/11-tool-rail.js` | the contextual toolbar, every property control |
+| `src/js/12-canvas.js` | every pointer gesture: drag, resize, rotate, marquee, ink |
+| `src/js/13-photographs.js` | resizing, dropping and pasting images |
+| `src/js/14-sections-and-pages.js` | sections, pages, re-ordering, covers |
+| `src/js/15-reading-mode.js`, `16-help.js` | Read mode and the shortcut sheet |
+| `src/js/17-save.js`, `18-boot.js` | publishing, exporting, startup |
 
-Splitting it into `src/*.js` the way Awl & Gusset is split is the obvious next move — see
-[CLAUDE.md](CLAUDE.md).
+Every file shares one global scope and nothing is imported. `src/order.json` is the load order
+and the only place it is written down: at load time a file may touch only what an earlier one
+has defined; calls happen later and may go anywhere.
 
 ## Working on it
 
 ```bash
-npm run check     # or: node tools/check.js
+npm run build     # src/ → notebook-portfolio.html
+npm run check     # the standing checks
 npm start         # python3 -m http.server 8732
 ```
+
+`npm run build -- --check` tells you whether the built page is stale without writing anything.
 
 `tools/check.js` is not a test suite. It is a short list of mistakes that have **already** been
 made in this file, each of which broke the page silently — a `url("…")` inside an inline style
@@ -111,6 +125,21 @@ shared link is a self-contained page with nothing to fetch — and why the copy 
 There is also a `localStorage` draft as a backstop, **Export notebook JSON** for a copy you
 keep, and **Import** to bring one back.
 
+## Starting from something
+
+A blank page is a poor invitation. `starters/` holds three notebooks with the pieces already
+placed and empty frames to drop photographs into — open the `?` menu, choose **Import a
+notebook…**, and paste one in.
+
+| | |
+|---|---|
+| `travel-journal.json` | Kraft cover, aged paper, a getting-there spread and a page of things you kept — tickets, stamps, an envelope, a postcard |
+| `field-notes.json` | Graph and dot paper, an hour column down the side, a habit grid, a measured-things table and a framed area to draw in |
+| `portfolio.json` | Foil-blocked cloth cover, a title opening and a piece laid out with details, specification and material swatches |
+
+They are made by `npm run starters`, so editing `tools/make-starters.js` is how you change
+them. Importing replaces what is open — export first if you want to keep it.
+
 ## Getting it out
 
 - **Print / save as PDF** — every chosen page at true size, one to a sheet, drawn by the same
@@ -123,7 +152,6 @@ Both let you tick which sections and pages go in.
 
 ## Not built yet
 
-- The file is one blob. Splitting it needs a small inliner, because publishing wants one file.
 - Undo is a snapshot stack of the whole notebook; it is fine at this size and will not stay fine.
 - Text is plain — no bold or italic *within* a block, only per block.
 - Photographs are resized to 1800 px on the long edge and embedded, so the whole notebook shares

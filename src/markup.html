@@ -1,0 +1,83 @@
+
+
+<div id="rail">
+  <button class="ico" id="b-side" aria-label="Sections">☰</button>
+  <span id="brand">Notebook&nbsp;Portfolio</span>
+  <input id="nbname" aria-label="Notebook name">
+  <div class="grow"></div>
+  <span class="eyebrow" id="savedat" hidden></span>
+  <button class="btn ghost" id="savewarn" hidden></button>
+  <button class="btn ghost" id="b-objs" aria-pressed="false">☰ Objects</button>
+  <button class="btn ghost" id="b-help" aria-label="Keyboard shortcuts">?</button>
+  <button class="btn" id="b-present">▶ Present</button>
+  <button class="btn pri" id="b-save">Save</button>
+</div>
+
+<div id="tools"></div>
+
+<aside id="objs" aria-label="Objects">
+  <div class="oh2"><span class="eyebrow">Objects on this spread</span>
+    <button class="ico" id="objs-x" aria-label="Close">✕</button></div>
+  <div id="objlist"></div>
+</aside>
+
+<aside id="side">
+  <div class="sgroup">
+    <div class="shead"><span class="eyebrow">Sections</span></div>
+    <div id="seclist"></div>
+    <button class="btn add" id="b-newsec">+ Section</button>
+  </div>
+  <div class="sgroup">
+    <div class="shead"><span class="eyebrow" id="pagehead">Pages</span></div>
+    <div id="pagelist"></div>
+    <div class="adds">
+      <button class="btn add" id="b-newpage">+ Page</button>
+      <button class="btn add" id="b-newcover">+ Cover</button>
+      <button class="btn add" id="b-today">+ Today</button>
+    </div>
+  </div>
+</aside>
+
+<div id="canvas">
+  <div id="world">
+    <div id="pages"></div>
+    <div id="spine" aria-hidden="true" hidden></div>
+    <div id="sten" aria-hidden="true" hidden></div>
+    <svg id="guides" aria-hidden="true"></svg>
+    <svg id="wet" aria-hidden="true"></svg>
+    <div id="sel" hidden>
+      <div class="box"></div>
+      <div class="h rot" data-h="rot"></div>
+      <div class="h nw" data-h="nw"></div><div class="h n" data-h="n"></div>
+      <div class="h ne" data-h="ne"></div><div class="h e" data-h="e"></div>
+      <div class="h se" data-h="se"></div><div class="h s" data-h="s"></div>
+      <div class="h sw" data-h="sw"></div><div class="h w" data-h="w"></div>
+    </div>
+  </div>
+  <div id="flip" aria-hidden="true" hidden></div>
+  <div id="rulT" aria-hidden="true"></div>
+  <div id="rulL" aria-hidden="true"></div>
+  <div id="markX" aria-hidden="true"></div>
+  <div id="markY" aria-hidden="true"></div>
+  <div id="rulPos" aria-hidden="true">0, 0</div>
+  <div id="hud"><div id="zoomer">
+    <button class="ico" id="z-out" aria-label="Zoom out">−</button>
+    <span class="lvl" id="z-lvl">100%</span>
+    <button class="ico" id="z-in" aria-label="Zoom in">+</button>
+    <button class="ico" id="z-fit" aria-label="Fit page">⤢</button>
+  </div></div>
+</div>
+
+<div id="ptitle"></div>
+<div id="pbar">
+  <button id="p-prev" aria-label="Previous page">←</button>
+  <span class="now" id="p-now">1 / 1</span>
+  <button id="p-next" aria-label="Next page">→</button>
+  <button id="p-exit">Exit</button>
+</div>
+
+<div id="printarea" aria-hidden="true"></div>
+<div id="pop" role="menu"></div>
+<div id="scrim"><div id="modal" role="dialog" aria-modal="true"></div></div>
+<div id="toast" role="status"></div>
+<input type="file" id="picker" accept="image/*" multiple hidden>

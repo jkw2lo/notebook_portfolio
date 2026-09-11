@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Plate & Bleed — the standing checks.
+/* Notebook Portfolio — the standing checks.
  *
  * There is no test suite in the awl-gusset sense: this page has no
  * pure functions to sweep, it has a canvas. What it does have is a
@@ -12,7 +12,7 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
-const FILE = path.join(__dirname, "..", "plate-and-bleed.html");
+const FILE = path.join(__dirname, "..", "notebook-portfolio.html");
 const html = fs.readFileSync(FILE, "utf8");
 
 let bad = 0;
@@ -31,7 +31,7 @@ const app = scripts.map(m => m[1]).sort((a, b) => b.length - a.length)[0] || "";
 console.log(`  ..   app script is ${app.length.toLocaleString()} characters`);
 
 /* ── it parses ─────────────────────────────────────────────── */
-try { new vm.Script(app, {filename: "plate-and-bleed.js"}); ok("the app script parses"); }
+try { new vm.Script(app, {filename: "notebook-portfolio.js"}); ok("the app script parses"); }
 catch (e) { fail("syntax error: " + e.message); }
 
 /* ── nothing is declared twice ──────────────────────────────
