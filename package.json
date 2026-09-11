@@ -1,0 +1,12 @@
+{
+  "name": "plate-and-bleed",
+  "version": "1.0.0",
+  "description": "A junk-journal notebook you build on facing pages — scrapbook, field notes, or portfolio.",
+  "repository": { "type": "git", "url": "https://github.com/jkw2lo/plate-and-bleed.git" },
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 8732",
+    "check": "node tools/check.js"
+  }
+}

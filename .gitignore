@@ -1,0 +1,6 @@
+.DS_Store
+node_modules/
+*.log
+# exported notebooks and standalone copies — yours, not the tool's
+*.notebook.json
+export/
