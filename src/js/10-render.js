@@ -137,7 +137,7 @@ const HUGS = new Set(["mark","date","seal","tag","swatch","ticket","stamp","libc
 const HUGS_H = new Set(["quote","spec","check","track","month","mood","rate","time"]);
 const DEF_SIZE = {mark:20, date:19, seal:18, tag:15, swatch:12, ticket:14, stamp:12,
   libcard:9, env:12, quote:15, spec:10.5, check:16, track:9, month:9, mood:20, rate:22, time:10};
-const AUTO_H = b = b.t === "text" || b.t === "stitch" || (b.t === "shape" && b.kind === "rule");
+const AUTO_H = b => b.t === "text" || b.t === "stitch" || (b.t === "shape" && b.kind === "rule");
 /* things whose own controls sit on the page and must take a click */
 const LIVE_BITS = "[data-ck],[data-day],[data-cell],[data-pick],[data-star]";
 const OPEN_SHAPES = ["solid","dashed","dotted","double"];

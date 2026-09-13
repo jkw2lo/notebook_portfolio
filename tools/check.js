@@ -31,8 +31,68 @@ const app = scripts.map(m => m[1]).sort((a, b) => b.length - a.length)[0] || "";
 console.log(`  ..   app script is ${app.length.toLocaleString()} characters`);
 
 /* ── it parses ─────────────────────────────────────────────── */
-try { new vm.Script(app, {filename: "notebook-portfolio.js"}); ok("the app script parses"); }
-catch (e) { fail("syntax error: " + e.message); }
+let parsed = null;
+try {
+  parsed = new vm.Script(app, {filename: "notebook-portfolio.js"});
+  ok("the app script parses");
+} catch (e) { fail("syntax error: " + e.message); }
+
+/* ── it RUNS ────────────────────────────────────────────────
+   Parsing is not enough, and believing it was cost a whole broken
+   release. `const AUTO_H = b = b.t === "text"` — an arrow that lost
+   its ">" — parses perfectly and then throws ReferenceError the
+   moment the script is evaluated, under "use strict", killing every
+   statement after it: the tool rail, every canvas gesture, boot.
+   The page came up as an empty shell with no error anyone would see.
+
+   So: evaluate the real script against a stub DOM and require the
+   top level to complete. `boot()` suspends on its first `await fetch`,
+   which never settles here, so nothing past that point is exercised —
+   this checks the loading of the page, not the running of it.       */
+function stub(path){
+  const fn = function(){ return stub(path + "()"); };
+  return new Proxy(fn, {
+    get(t, k){
+      if (k in t) return t[k];                       /* whatever was assigned */
+      if (k === Symbol.iterator) return function*(){};
+      if (k === Symbol.toPrimitive) return () => 0;
+      if (k === "length") return 0;
+      if (k === "then") return undefined;            /* not a thenable */
+      return stub(path + "." + String(k));
+    },
+    set(t, k, v){ t[k] = v; return true; },
+    has(){ return true; }
+  });
+}
+if (parsed){
+  const doc = stub("document");
+  const sandbox = {
+    console: {log(){}, warn(){}, error(){}},
+    document: doc,
+    location: {href: "https://example.invalid/index.html"},
+    navigator: {userAgent: "check"},
+    innerWidth: 1440, innerHeight: 900,
+    localStorage: {getItem: () => null, setItem(){}, removeItem(){}},
+    indexedDB: stub("indexedDB"),
+    /* never settles, so boot() stops at its first await and the rest of
+       this check is about load time only */
+    fetch: () => new Promise(() => {}),
+    addEventListener(){}, removeEventListener(){},
+    setTimeout: () => 0, clearTimeout(){}, setInterval: () => 0, clearInterval(){},
+    requestAnimationFrame: () => 0,
+    performance: {now: () => 0},
+    getSelection: () => stub("selection"),
+    matchMedia: () => ({matches: false, addEventListener(){}})
+  };
+  sandbox.window = sandbox; sandbox.self = sandbox; sandbox.globalThis = sandbox;
+  try {
+    parsed.runInNewContext(sandbox, {timeout: 10000});
+    ok("the app script runs — every top-level statement completed");
+  } catch (e) {
+    fail("the script THROWS at load: " + e.message +
+         "\n         Everything after that line is dead — the page comes up as an empty shell.");
+  }
+}
 
 /* ── nothing is declared twice ──────────────────────────────
    Parts of this file were spliced in over many sittings; a second
