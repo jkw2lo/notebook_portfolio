@@ -29,8 +29,8 @@ notebook-portfolio/
 ├── tools/build.js         src/ → index.html, the one page that ships
 ├── tools/check.js         the standing checks
 ├── starters/              notebooks to import and build on
-├── index.html             BUILT — do not edit by hand (index.html because
-│                          that is what GitHub Pages serves from the root)
+├── index.html             BUILT — a whole document, for Pages or a folder
+├── artifact/page.html     BUILT — the same page as a fragment, to publish
 ├── docs/notebook-format.md
 ├── README.md
 └── CLAUDE.md              this file
@@ -157,6 +157,15 @@ number field updating on every keystroke, so typing "2026" was evaluated as 2, t
 202. A month is now picked whole with `<input type="month">` and parsed as `YYYY-MM`.
 
 ### Away from Claude
+
+**Two builds, because the two hosts want opposite things.** The artifact host wraps what you
+publish in its own `<!doctype>` and `<head>`, so an artifact page must be a FRAGMENT; served
+from GitHub Pages the same bytes have no charset, no viewport and no doctype. `index.html` is
+the whole document, `artifact/page.html` is the fragment. Publishing the whole document gives
+it two heads; serving the fragment gives it none — and the missing doctype is what made
+`pageSource()` reject the page and a standalone export fail with "could not read its own
+source". `pageSource()` now proves the page by its SEED BLOCK and adds a doctype if there is
+none.
 
 **`claude.use()` resolving `null` is not an error, it is a place.** Opened from a folder or off
 GitHub Pages there is no host to publish into. `HOSTLESS` turns Save into **Export**, and the

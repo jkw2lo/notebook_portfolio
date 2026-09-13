@@ -266,7 +266,11 @@ function dirty(on){
   b.disabled = !DIRTY || RO;
   const w = $("#savedat");
   if (HOSTLESS){                    /* opened as a plain web page, not in Claude */
-    w.hidden = false; w.textContent = "not saved here — Export keeps it";
+    b.innerHTML = DIRTY ? '<span class="dot"></span>Save' : "✓ Saved";
+    b.disabled = !DIRTY;
+    w.hidden = false;
+    w.textContent = DIRTY ? "unsaved" : "kept in this browser";
+    if (DIRTY) { try { localStorage.setItem("pb.draft", JSON.stringify(serialise())); } catch(_){} }
     return;
   }
   if (!DIRTY){ dirty.at = new Date(); w.hidden = false;

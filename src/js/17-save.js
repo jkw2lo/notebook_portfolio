@@ -4,7 +4,7 @@ function serialise(){
     stencils:NB.stencils||[], stenOn:NB.stenOn!==false, stenSnap:NB.stenSnap!==false, rulers:!!NB.rulers,
     bind:NB.bind||"single", gutter:gutterW(), spine:NB.spine||"stitch",
     gutterShade:NB.gutterShade!==false, nums:NB.nums!==false, anim:NB.anim!==false,
-    kit:NB.kit||"Bench"}));
+    kit:NB.kit||"Bench", templates:NB.templates||[], daily:NB.daily||null}));
   const pl = out.sections.flatMap(s => s.pages);
   for (const p of pl) for (const b of p.blocks){
     if (!b.src) continue;
@@ -52,8 +52,12 @@ async function pageSource(){
     const r = await fetch(location.href, {cache:"no-store"});
     if (!r.ok) return null;
     const t = await r.text();
-    if (!/^\s*<!doctype html/i.test(t) || !seedRe().test(t)) return null;
-    return t;
+    /* The seed block is the real proof this is our own page. A doctype
+        is NOT: the artifact host adds one at publish time, so the copy
+        in the repo has none — which is what made a standalone export
+        fail with "could not read its own source". */
+    if (!seedRe().test(t)) return null;
+    return /^\s*<!doctype/i.test(t) ? t : "<!doctype html>\n" + t;
   } catch(_){ return null; }
 }
 async function saveWholePage(){
@@ -113,6 +117,7 @@ function warnSave(code, msg){
     no_source: "The page could not read its own source, which the whole-page save needs. Use Export to keep your notebook and tell Claude this happened.",
     no_seed: "This version of the page has no place to write the notebook into. Use Export, then tell Claude.",
     too_large: "The notebook and its photographs are larger than one page can hold. Delete a few photographs, or split the notebook, then save again.",
+    no_room: "This browser would not store the notebook — usually private browsing, or the site's storage is full. Export keeps a copy you can open anywhere.",
     rate_limited: "Saved too often in a short time. Wait half a minute and press Save again.",
     invalid_content: "The page that was submitted was not accepted. Use Export to keep your work and tell Claude.",
     upstream_error: "The save did not get through. Press Save again in a moment; if it keeps failing, use Export."

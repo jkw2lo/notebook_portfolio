@@ -16,5 +16,6 @@
   "15-reading-mode.js",
   "16-help.js",
   "17-save.js",
-  "18-boot.js"
+  "18-boot.js",
+  "19-local-and-templates.js"
 ]

@@ -77,7 +77,8 @@ there is nothing to fetch alongside it. So `src/` is the source and
 
 | File | What it owns |
 |---|---|
-| `index.html` | **built** — do not edit; `npm run build` writes it |
+| `index.html` | **built** — a complete document, for Pages or a folder |
+| `artifact/page.html` | **built** — the same page as a fragment, for publishing as an artifact |
 | `src/head.html`, `src/markup.html` | the title, the fonts, and the page's own elements |
 | `src/styles.css` | both palettes, every block's look, the print rules |
 | `src/js/01-core.js` | helpers, colours, page sizes, the papers |
@@ -127,8 +128,8 @@ thing that needs a host.
 | | In Claude | On GitHub Pages, or a local file |
 |---|---|---|
 | Make a notebook | yes | yes |
-| **Save** | writes itself as a new version | nothing to publish into — the button becomes **↓ Export** |
-| Survives a reload | yes | the text does, from a local draft; **photographs do not** |
+| **Save** | writes itself as a new version | keeps it in this browser, photographs included |
+| Survives a reload | yes | yes — the notebook in localStorage, the photographs in IndexedDB |
 | Export JSON / standalone | yes | yes — and the standalone copy embeds the photographs |
 | Print / PDF | yes | yes |
 

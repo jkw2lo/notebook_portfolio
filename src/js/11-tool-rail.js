@@ -78,7 +78,8 @@ function insertHTML(){
     <button class="btn ghost" id="t-duppage">Duplicate</button>
     <button class="btn ghost" id="t-delpage">Delete</button>
     <span class="sep"></span>
-    <button class="btn ghost" id="t-cover">${isCover(page()) ? "◆" : "◇"} Cover ▾</button>`;
+    <button class="btn ghost" id="t-cover">${isCover(page()) ? "◆" : "◇"} Cover ▾</button>
+    <button class="btn ghost" id="t-tmpl">▤ Template ▾</button>`;
 }
 
 function propsHTML(arr){
@@ -306,6 +307,7 @@ function wireTools(arr){
     if (e.target.closest("#t-doodle")) return doodleMenu(e.target.closest("#t-doodle"), null);
     if (e.target.closest("#t-layouts")) return layoutMenu(e.target.closest("#t-layouts"));
     if (e.target.closest("#t-cover")) return coverMenu(e.target.closest("#t-cover"));
+    if (e.target.closest("#t-tmpl")) return tmplMenu(e.target.closest("#t-tmpl"));
     if (e.target.closest("#t-rename")) return renamePage();
     if (e.target.closest("#t-duppage")) return dupPage();
     if (e.target.closest("#t-delpage")) return delPage();
@@ -442,7 +444,7 @@ function insert(kind, at){
 /* ── layouts: starting arrangements, not auto-layout ───────── */
 const LAYOUTS = {
   "Daily entry": p => { const t = today(); return [
-    blk("date",p.x,p.y,210,74,{text:t.stamp,sub:t.wd,size:19,color:"#8A2B2B",rot:-2.2}),
+    blk("date",p.x,p.y,210,74,{iso:t.iso,fmt:"long",style:"box",font:"type",size:17,color:"#8A2B2B",rot:-2.2}),
     blk("text",p.x,p.y+104,470,0,{text:"Today…",preset:"hand",size:21,align:"left",color:"#26221B"}),
     blk("check",p.x,p.y+240,330,150,{items:[[0,"First thing"],[0,"Second thing"],[0,"Third thing"]],size:16}),
     blk("scrap",p.x+390,p.y+230,300,220,{color:pick(SCRAP_COLORS),rot:-3}),

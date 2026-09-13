@@ -24,7 +24,9 @@ function adopt(d){
     bind: d.bind || "single", gutter: d.gutter == null ? 56 : d.gutter,
     spine: d.spine || "stitch", gutterShade: d.gutterShade !== false,
     nums: d.nums !== false, anim: d.anim !== false, readonly: !!d.readonly,
-    kit: KITS[d.kit] ? d.kit : "Bench"};
+    kit: KITS[d.kit] ? d.kit : "Bench",
+    templates: Array.isArray(d.templates) ? d.templates : [],
+    daily: d.daily || null};
   /* the cover used to be one hidden thing on the notebook; it is a
      page now, so fold the old one into the front of the first section */
   if (d.cover && d.cover.on !== false && !NB.sections.some(x => x.pages.some(isCover))){
@@ -68,10 +70,12 @@ function adopt(d){
        so Save becomes the thing that actually keeps the work */
     HOSTLESS = true;
     const b = $("#b-save");
-    b.hidden = false; b.disabled = false; b.textContent = "↓ Export";
-    b.title = "Save a standalone copy — this page cannot publish";
-    b.onclick = exportStandalone;
-    dirty(true);
+    b.hidden = false; b.disabled = false;
+    b.title = "Keep it in this browser — there is nothing to publish to here";
+    b.onclick = saveLocal;
+    dirty(DIRTY);
   }
+  const back = await restorePhotos();
+  if (back) toast(`${back} photograph${back>1?"s":""} back from this browser's store.`, 3000);
   if (!loaded) toast("Double-click the page to write. Press P for the pen. Drop photos anywhere.", 5200);
 })();

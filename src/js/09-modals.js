@@ -105,7 +105,7 @@ function seed(){
   return {
     title:"My journal", version:3, stencils:[], stenOn:true, stenSnap:true, rulers:false,
     bind:"spread", gutter:56, spine:"stitch", gutterShade:true, nums:true, anim:true,
-    kit:"Bench",
+    kit:"Bench", templates:[], daily:null,
     sections:[
       {id:uid(), name:"Daily pages", color:SECT_COLORS[4], pages:[
         {id:uid(), name:t.iso, size:"land", paper:"ruled", blocks:[

@@ -15,7 +15,7 @@ async function setPhoto(b, file){
     const {blob,w,h} = await shrink(file);
     if (b.src && b.src.startsWith("blob:")) URL.revokeObjectURL(b.src);
     snap(); b.src = URL.createObjectURL(blob); b.natW = w; b.natH = h;
-    BLOBS.set(b.id, blob); dirty(); drawBlocks(); drawSide();
+    BLOBS.set(b.id, blob); idbPut(b.id, blob); dirty(); drawBlocks(); drawSide();
   } catch(_){ toast("That file could not be read as an image."); }
 }
 async function dropFiles(files, at){
@@ -30,7 +30,7 @@ async function dropFiles(files, at){
       const ww = 320, hh = Math.round(ww*h/w);
       const b = blk("photo", Math.round(at.x-ww/2+ox), Math.round(at.y-hh/2+ox), ww, hh,
         {src:URL.createObjectURL(blob), natW:w, natH:h, fit:"cover", frame:"none", radius:2, caption:""});
-      snap(); putBlocks([b], at); BLOBS.set(b.id, blob); ox += 26; n++;
+      snap(); putBlocks([b], at); BLOBS.set(b.id, blob); idbPut(b.id, blob); ox += 26; n++;
     } catch(_){}
   }
   if (n){ dirty(); drawBlocks(); drawSel(); drawSide(); toast(`${n} photograph${n>1?"s":""} placed.`); }

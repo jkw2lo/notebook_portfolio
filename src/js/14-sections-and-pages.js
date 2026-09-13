@@ -67,11 +67,14 @@ $("#b-newcover").onclick = () => {
 $("#b-today").onclick = () => {
   const t = today();
   snap();
-  const p = {id:uid(), name:t.iso, size:"land", paper:"ruled", blocks:[]};
+  const tpl = dailyTemplate();
+  const p = tpl ? pageFromTemplate(tpl, t.iso)
+                : {id:uid(), name:t.iso, size:"land", paper:"ruled",
+                   blocks:stampToday(LAYOUTS["Daily entry"]({x:92, y:64}))};
+  p.name = t.iso;
   sec().pages.push(p); PI = sec().pages.length-1;
-  p.blocks.push(...LAYOUTS["Daily entry"]({x:92, y:64}));
   SEL.clear(); dirty(); drawAll(); fitPage(false);
-  toast(t.nice + " — a fresh page.");
+  toast(tpl ? `${t.nice} — from “${tpl.name}”, dated for you.` : t.nice + " — a fresh page.");
 };
 async function renameSection(){
   const v = await askSection("Rename section", sec().name, sec().color);
