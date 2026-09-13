@@ -4,3 +4,4 @@ node_modules/
 # exported notebooks and standalone copies — yours, not the tool's
 *.notebook.json
 export/
+nohup.out

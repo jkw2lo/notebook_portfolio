@@ -2,7 +2,7 @@
   "name": "notebook-portfolio",
   "version": "1.0.0",
   "description": "A junk-journal notebook you build on facing pages — scrapbook, field notes, or portfolio.",
-  "repository": { "type": "git", "url": "https://github.com/jkw2lo/notebook-portfolio.git" },
+  "repository": { "type": "git", "url": "https://github.com/jkw2lo/notebook_portfolio.git" },
   "license": "MIT",
   "private": true,
   "scripts": {
