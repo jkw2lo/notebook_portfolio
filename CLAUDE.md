@@ -3,6 +3,15 @@
 A junk-journal notebook that runs as one static page with no dependencies and nothing to
 fetch: open `index.html` and it works.
 
+**`npm run check` must PASS, and it now RUNS the script, not just parses it.** A patch once
+turned `const AUTO_H = b => …` into `const AUTO_H = b = …`. That parses. Under `"use strict"` it
+throws `ReferenceError: b is not defined` the instant the script is evaluated, and every
+statement after that line — the whole tool rail, every canvas gesture, the page rail, boot —
+simply never runs. The page came up as an empty shell. `check.js` evaluates the built script
+against a stub DOM and requires the top level to complete; `boot()` parks on its first `await
+fetch`, so it checks loading the page, not running it. **If you add a check, prove it fails on
+the bug it is for** before you believe it.
+
 **Read this before changing anything.** Almost every rule below exists because the obvious
 approach broke the page *silently* — no error in the console, just a control that did nothing
 or a piece that vanished. The note says what each one cost.
