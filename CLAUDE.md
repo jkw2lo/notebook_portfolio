@@ -193,14 +193,17 @@ resizing a picture slid its marks off it.
 **Every block that shows text must read its own `size`.** `sealHTML` did not, so the control
 appeared to do nothing. If a block has a size field, the renderer uses it.
 
-**A frame drawn round words is sized in `em`, and the box grows with the type.** A stamp's
-perforations, a date's border, a seal's disc were all fixed pixel values, so turning the type up
-pushed the letters straight through the edge and every change meant resizing the piece by hand.
-The CSS is now `em`-relative with the root size set on the block, and `HUGS` / `HUGS_H` name the
-kinds whose box is scaled by the same ratio when `size` changes — `HUGS` both ways, `HUGS_H`
-height only, because a quote band or an hour column keeps the width it was pulled to. `DEF_SIZE`
-holds each kind's default, because the ratio is measured against the size the block *had*, and a
-block that never set one has none to measure from.
+**A frame drawn round words is sized in `em`.** A stamp's perforations, a date's border, a
+seal's disc were fixed pixel values, so turning the type up pushed the letters through the edge.
+The CSS is `em`-relative with the root size set on the block, so the frame follows the type.
+
+**A rubber stamp IS its words — `FITS`.** There is no container behind it to fall out of step:
+`drawBlocks` measures `b.w`/`b.h` back off what was actually drawn, every render, so the type
+size is the only size there is and dragging a corner sets `b.size` rather than the box. Two
+earlier goes were both wrong and both were rejected: growing `b.w`/`b.h` alongside `size` read as
+the piece resizing itself out from under you, and a centred wrapper with `overflow:hidden`
+**clipped the stamp out of existence** the moment the words outgrew the old box — losing the top
+edge first, which is why the words looked like they were sliding upward.
 
 ### Type
 

@@ -134,10 +134,13 @@ function blockHTML(b){
 
 /* a frame drawn round words has to grow when the words do — but a band
    that spans the page keeps its width and only gets taller */
-const HUGS = new Set(["mark","date","seal","tag","swatch","ticket","stamp","libcard","env"]);
-const HUGS_H = new Set(["quote","spec","check","track","month","mood","rate","time"]);
 const DEF_SIZE = {mark:20, date:19, seal:18, tag:15, swatch:12, ticket:14, stamp:12,
   libcard:9, env:12, quote:15, spec:10.5, check:16, track:9, month:9, mood:20, rate:22, time:10};
+/* A piece whose SIZE IS ITS CONTENT. The block box is measured from what
+   was drawn, every render, so the type size is the only size there is and
+   nothing can be clipped by a rectangle that fell out of step. Dragging a
+   corner scales the type instead of the box — see MODE "size". */
+const FITS = new Set(["mark"]);
 const AUTO_H = b => b.t === "text" || b.t === "stitch" || (b.t === "shape" && b.kind === "rule");
 /* things whose own controls sit on the page and must take a click */
 const LIVE_BITS = "[data-ck],[data-day],[data-cell],[data-pick],[data-star]";

@@ -123,6 +123,13 @@ $("#canvas").addEventListener("pointermove", e => {
     const north = h.startsWith("n"), south = h.startsWith("s");
     ORIG.blocks.forEach(o => {
       const b = byId(o.id); if (!b) return;
+      /* a stamp has no box of its own — pulling its corner sets the TYPE,
+         and drawBlocks measures the new box back off what that draws */
+      if (FITS.has(b.t)){
+        const k = Math.max(.15, (o.w + (east ? lx : west ? -lx : 0)) / (o.w || 1));
+        b.size = clamp(Math.round((o.size || DEF_SIZE[b.t] || 20) * k), 6, 200);
+        drawBlocks(); return;
+      }
       let x=o.x, y=o.y, w=o.w, hh=o.h||30;
       if (east) w = Math.max(24, o.w + lx);
       if (west){ w = Math.max(24, o.w - lx); x = o.x + (o.w - w); }

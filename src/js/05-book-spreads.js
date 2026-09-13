@@ -107,18 +107,24 @@ function drawBlocks(){
     for (const b of p.blocks){
       const el = document.createElement("div");
       el.className = "blk"; el.dataset.id = b.id;
-      const auto = AUTO_H(b);
-      el.style.cssText = `left:${b.x}px;top:${b.y}px;width:${b.w}px;` +
-        (auto && !b.h ? "" : `height:${b.h}px;`) + `transform:rotate(${b.rot||0}deg)`;
+      const auto = AUTO_H(b), fit = FITS.has(b.t);
+      el.style.cssText = `left:${b.x}px;top:${b.y}px;` +
+        (fit ? "" : `width:${b.w}px;` + (auto && !b.h ? "" : `height:${b.h}px;`)) +
+        `transform:rotate(${b.rot||0}deg)`;
       if (isLocked(b)) el.classList.add("lk");
       if (b.id === CROP) el.classList.add("crop");
       el.innerHTML = blockHTML(b) + `<div class="hit"></div>`;
-      if (b.x + b.w < -4 || b.y + (b.h||30) < -4 || b.x > pw+4 || b.y > ph+4) el.classList.add("off");
       host.appendChild(el);
-      if (auto && !b.h){
+      if (fit){                    /* the box is whatever was drawn */
+        b.w = Math.max(8, el.offsetWidth);
+        b.h = Math.max(8, el.offsetHeight);
+      } else if (auto && !b.h){
         b.h = Math.max(el.offsetHeight, b.t === "text" ? Math.round((b.size||16)*1.6) : 10);
         el.style.height = b.h + "px";
       }
+      /* measured last, because a fitted block does not know its size
+         until it has been drawn */
+      if (b.x + b.w < -4 || b.y + (b.h||30) < -4 || b.x > pw+4 || b.y > ph+4) el.classList.add("off");
     }
   }
 }

@@ -118,9 +118,9 @@ function markHTML(b){
   const al = esc(b.align || "center");
   const t = esc(b.text || "DONE").replace(/\n/g, "<br>");
   const sub = (cls === "rnd" && b.sub) ? `<span class="sub">${esc(b.sub)}</span>` : "";
-  /* the wrapper holds the position; the stamp is sized by its own words */
-  return `<div class="b-markwrap" style="position:absolute;inset:0;color:${c};font-size:${fs}px">
-    <div class="b-mark ${cls}" style="--bord:${bord}em;text-align:${al}">
-      <span class="t">${t}</span>${sub}</div></div>`;
+  /* no wrapper and no absolute box: drawBlocks measures the block FROM
+     this element, so the stamp can never outgrow its own rectangle */
+  return `<div class="b-mark ${cls}" style="color:${c};font-size:${fs}px;--bord:${bord}em;
+    text-align:${al}"><span class="t">${t}</span>${sub}</div>`;
 }
 

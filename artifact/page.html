@@ -423,19 +423,21 @@ body.present #ptitle{display:block}
 .b-quote .q{font-family:var(--f-disp); font-style:italic; font-size:1em; line-height:1.45}
 .b-quote .by{font-family:var(--f-mono); font-size:.58em; letter-spacing:.16em; text-transform:uppercase; opacity:.65}
 
-/* The frame belongs to the WORDS, not to the box they sit in. It used
-   to be `inset:0`, so the border was the block rectangle and setting the
-   type bigger did nothing to it — or overflowed it. The wrapper holds
-   the position; the stamp inside is sized by its own text. */
-.b-markwrap{display:grid; place-items:center; overflow:hidden}
-.b-mark{display:inline-block; max-width:100%; text-align:center; opacity:.8;
-  font-family:var(--f-type); letter-spacing:.08em; line-height:1.15}
-.b-mark .t{display:block; padding:.12em .42em}
+/* A RUBBER STAMP IS ITS WORDS. There is no container behind it to get
+   out of step: the block box is measured FROM the stamp every render
+   (`FITS`), so the type size is the only size there is. The wrapper this
+   replaced clipped the stamp the moment the words outgrew the old box —
+   and a centred item that overflows loses its top edge first, which is
+   why the words looked like they were sliding upward. */
+.b-mark{display:inline-block; text-align:center; opacity:.8;
+  font-family:var(--f-type); letter-spacing:.08em; line-height:1.15;
+  white-space:pre-line}
+.b-mark .t{display:block; padding:.16em .46em}
 .b-mark.box{border:var(--bord,.16em) solid currentColor; border-radius:.16em;
   box-shadow:inset 0 0 0 .09em transparent, inset 0 0 0 calc(.09em + var(--bord,.16em) * .34) currentColor}
 .b-mark.rnd{border:var(--bord,.16em) solid currentColor; border-radius:50%;
-  box-shadow:inset 0 0 0 calc(var(--bord,.16em) * 1.5) currentColor;
-  display:grid; place-items:center; aspect-ratio:1; padding:.5em}
+  box-shadow:inset 0 0 0 calc(.09em + var(--bord,.16em) * .34) currentColor;
+  display:grid; place-items:center; aspect-ratio:1; padding:.55em}
 .b-mark.rnd .sub{display:block; font-family:var(--f-mono); font-size:.42em; letter-spacing:.22em; opacity:.85}
 .b-mark.ban{background:currentColor; clip-path:polygon(0 0,100% 0,100% 100%,0 100%,7% 50%);
   padding:.24em .55em .24em 1em}
@@ -1002,10 +1004,10 @@ function markHTML(b){
   const al = esc(b.align || "center");
   const t = esc(b.text || "DONE").replace(/\n/g, "<br>");
   const sub = (cls === "rnd" && b.sub) ? `<span class="sub">${esc(b.sub)}</span>` : "";
-  /* the wrapper holds the position; the stamp is sized by its own words */
-  return `<div class="b-markwrap" style="position:absolute;inset:0;color:${c};font-size:${fs}px">
-    <div class="b-mark ${cls}" style="--bord:${bord}em;text-align:${al}">
-      <span class="t">${t}</span>${sub}</div></div>`;
+  /* no wrapper and no absolute box: drawBlocks measures the block FROM
+     this element, so the stamp can never outgrow its own rectangle */
+  return `<div class="b-mark ${cls}" style="color:${c};font-size:${fs}px;--bord:${bord}em;
+    text-align:${al}"><span class="t">${t}</span>${sub}</div>`;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1561,18 +1563,24 @@ function drawBlocks(){
     for (const b of p.blocks){
       const el = document.createElement("div");
       el.className = "blk"; el.dataset.id = b.id;
-      const auto = AUTO_H(b);
-      el.style.cssText = `left:${b.x}px;top:${b.y}px;width:${b.w}px;` +
-        (auto && !b.h ? "" : `height:${b.h}px;`) + `transform:rotate(${b.rot||0}deg)`;
+      const auto = AUTO_H(b), fit = FITS.has(b.t);
+      el.style.cssText = `left:${b.x}px;top:${b.y}px;` +
+        (fit ? "" : `width:${b.w}px;` + (auto && !b.h ? "" : `height:${b.h}px;`)) +
+        `transform:rotate(${b.rot||0}deg)`;
       if (isLocked(b)) el.classList.add("lk");
       if (b.id === CROP) el.classList.add("crop");
       el.innerHTML = blockHTML(b) + `<div class="hit"></div>`;
-      if (b.x + b.w < -4 || b.y + (b.h||30) < -4 || b.x > pw+4 || b.y > ph+4) el.classList.add("off");
       host.appendChild(el);
-      if (auto && !b.h){
+      if (fit){                    /* the box is whatever was drawn */
+        b.w = Math.max(8, el.offsetWidth);
+        b.h = Math.max(8, el.offsetHeight);
+      } else if (auto && !b.h){
         b.h = Math.max(el.offsetHeight, b.t === "text" ? Math.round((b.size||16)*1.6) : 10);
         el.style.height = b.h + "px";
       }
+      /* measured last, because a fitted block does not know its size
+         until it has been drawn */
+      if (b.x + b.w < -4 || b.y + (b.h||30) < -4 || b.x > pw+4 || b.y > ph+4) el.classList.add("off");
     }
   }
 }
@@ -2651,10 +2659,13 @@ function blockHTML(b){
 
 /* a frame drawn round words has to grow when the words do — but a band
    that spans the page keeps its width and only gets taller */
-const HUGS = new Set(["mark","date","seal","tag","swatch","ticket","stamp","libcard","env"]);
-const HUGS_H = new Set(["quote","spec","check","track","month","mood","rate","time"]);
 const DEF_SIZE = {mark:20, date:19, seal:18, tag:15, swatch:12, ticket:14, stamp:12,
   libcard:9, env:12, quote:15, spec:10.5, check:16, track:9, month:9, mood:20, rate:22, time:10};
+/* A piece whose SIZE IS ITS CONTENT. The block box is measured from what
+   was drawn, every render, so the type size is the only size there is and
+   nothing can be clipped by a rectangle that fell out of step. Dragging a
+   corner scales the type instead of the box — see MODE "size". */
+const FITS = new Set(["mark"]);
 const AUTO_H = b => b.t === "text" || b.t === "stitch" || (b.t === "shape" && b.kind === "rule");
 /* things whose own controls sit on the page and must take a click */
 const LIVE_BITS = "[data-ck],[data-day],[data-cell],[data-pick],[data-star]";
@@ -3486,6 +3497,13 @@ $("#canvas").addEventListener("pointermove", e => {
     const north = h.startsWith("n"), south = h.startsWith("s");
     ORIG.blocks.forEach(o => {
       const b = byId(o.id); if (!b) return;
+      /* a stamp has no box of its own — pulling its corner sets the TYPE,
+         and drawBlocks measures the new box back off what that draws */
+      if (FITS.has(b.t)){
+        const k = Math.max(.15, (o.w + (east ? lx : west ? -lx : 0)) / (o.w || 1));
+        b.size = clamp(Math.round((o.size || DEF_SIZE[b.t] || 20) * k), 6, 200);
+        drawBlocks(); return;
+      }
       let x=o.x, y=o.y, w=o.w, hh=o.h||30;
       if (east) w = Math.max(24, o.w + lx);
       if (west){ w = Math.max(24, o.w - lx); x = o.x + (o.w - w); }
