@@ -92,7 +92,8 @@ function blockHTML(b){
       return `<div class="b-stamp" style="font-size:${b.size||12}px"><div class="in" style="background:${esc(b.color||"#8FA9B8")}">
         ${b.src ? `<img src="${esc(b.src)}" alt="" draggable="false">` : ""}
         <span class="val">${esc(b.val||"")}</span>
-        <span class="cap">${esc(b.cap||"")}</span></div></div>`;
+        <span class="cap" style="text-align:${esc(b.align||"center")}">${
+          esc(b.cap||"").replace(/\n/g, "<br>")}</span></div></div>`;
     case "ribbon":
       return `<div class="b-ribbon" style="${tapeCSS(b, esc(b.color||RIBBON_COLORS[0]))}"></div>`;
     case "date":   return dateHTML(b);

@@ -75,6 +75,7 @@ function adopt(d){
     b.onclick = saveLocal;
     dirty(DIRTY);
   }
+  warmFaces();
   const back = await restorePhotos();
   if (back) toast(`${back} photograph${back>1?"s":""} back from this browser's store.`, 3000);
   if (!loaded) toast("Double-click the page to write. Press P for the pen. Drop photos anywhere.", 5200);

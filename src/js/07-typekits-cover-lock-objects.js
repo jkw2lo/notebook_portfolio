@@ -69,8 +69,9 @@ function kitMenu(anchor, arr){
   popup(anchor, `<div class="gl">Type kit — sets every role at once</div>
     <div class="kitgrid">${Object.keys(KITS).map(k => `
       <button class="kitcard ${(NB.kit||"Bench")===k?"on":""}" data-kit="${esc(k)}">
-        <span class="hd" style="${textStyle({kit:k,role:"title"})};font-size:22px">${esc(k)}</span>
-        <span class="bd" style="${textStyle({kit:k,role:"body"})};font-size:11px">The quick brown fox</span>
+        <span class="hd" style="${textStyle({kit:k,role:"header"})};font-size:27px">Ag</span>
+        <span class="ti" style="${textStyle({kit:k,role:"title"})};font-size:15px">${esc(k)}</span>
+        <span class="bd" style="${textStyle({kit:k,role:"body"})};font-size:12px">Handgloves 123</span>
         <span class="cp" style="${textStyle({kit:k,role:"label"})};font-size:8px">${esc(KITS[k].note)}</span>
       </button>`).join("")}</div>
     <hr><div class="gl">Role for the selected text</div>

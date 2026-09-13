@@ -109,15 +109,18 @@ function quoteHTML(b){
 /* ── RUBBER STAMPS ───────────────────────────────────────── */
 const MARKS = ["DONE","TO DO","IDEA","NOTE","SEEN","DRAFT","URGENT","KEEP"];
 function markHTML(b){
-  const c = esc(b.color || "#8A2B2B"), st = b.style || "box", t = esc(b.text || "DONE");
-  const fs = b.size || 20;
-  if (st === "round") return `<div class="b-mark rnd" style="position:absolute;inset:0;color:${c};font-size:${fs}px">
-    <span class="t">${t}</span><span class="sub">${esc(b.sub||"")}</span></div>`;
-  if (st === "banner") return `<div class="b-mark ban" style="position:absolute;inset:0;color:${c};font-size:${fs}px">
-    <span class="t">${t}</span></div>`;
-  if (st === "burst") return `<div class="b-mark bst" style="position:absolute;inset:0;color:${c};font-size:${fs}px">
-    <span class="t">${t}</span></div>`;
-  return `<div class="b-mark box" style="position:absolute;inset:0;color:${c};font-size:${fs}px">
-    <span class="t">${t}</span></div>`;
+  const c = esc(b.color || "#8A2B2B"), fs = b.size || 20;
+  /* the rail has always written the SHORT code and this read the long
+     one, so every style but "framed" quietly did nothing */
+  const cls = {round:"rnd", rnd:"rnd", banner:"ban", ban:"ban",
+               burst:"bst", bst:"bst"}[b.style || "box"] || "box";
+  const bord = (b.bord == null ? 16 : b.bord) / 100;
+  const al = esc(b.align || "center");
+  const t = esc(b.text || "DONE").replace(/\n/g, "<br>");
+  const sub = (cls === "rnd" && b.sub) ? `<span class="sub">${esc(b.sub)}</span>` : "";
+  /* the wrapper holds the position; the stamp is sized by its own words */
+  return `<div class="b-markwrap" style="position:absolute;inset:0;color:${c};font-size:${fs}px">
+    <div class="b-mark ${cls}" style="--bord:${bord}em;text-align:${al}">
+      <span class="t">${t}</span>${sub}</div></div>`;
 }
 

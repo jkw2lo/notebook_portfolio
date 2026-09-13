@@ -41,12 +41,23 @@ function toLocal(b, wx, wy){
   return {x: dx*Math.cos(t) - dy*Math.sin(t) + b.w/2,
           y: dx*Math.sin(t) + dy*Math.cos(t) + (b.h||30)/2};
 }
+/* Strokes are kept in a 0–1000 square of their own, NOT in the block's
+   pixels. Drawn in pixels they were re-read against whatever size the
+   block happened to be later, so resizing a picture slid its marks off
+   it. Normalised, the drawing simply stretches with the picture.
+   A stroke without `n` is from before that fix and is scaled on sight. */
+const PEN_VB = 1000;
 function penOverlay(b){
   if (!b.pen || !b.pen.length) return "";
-  return `<svg class="pink" viewBox="0 0 ${b.w} ${b.h||30}" preserveAspectRatio="none">` +
-    b.pen.map(s => `<path d="${inkPath(s)}" fill="none" stroke="${esc(s.color||"#FFF")}"
-      stroke-width="${s.width||4}" stroke-linecap="round" stroke-linejoin="round"
-      ${s.kind === "marker" ? 'opacity="0.45"' : ""}/>`).join("") + `</svg>`;
+  const w = b.w || 1, h = b.h || 30;
+  return `<svg class="pink" viewBox="0 0 ${PEN_VB} ${PEN_VB}" preserveAspectRatio="none">` +
+    b.pen.map(s => {
+      const pts = s.n ? s.pts : (s.pts||[]).map(q => [q[0]/w*PEN_VB, q[1]/h*PEN_VB]);
+      const wd  = s.n ? (s.width || 40) : (s.width || 4)/w*PEN_VB;
+      return `<path d="${inkPath({pts})}" fill="none" stroke="${esc(s.color||"#FFF")}"
+        stroke-width="${wd}" stroke-linecap="round" stroke-linejoin="round"
+        ${s.kind === "marker" ? 'opacity="0.45"' : ""}/>`;
+    }).join("") + `</svg>`;
 }
 function photoHTML(b){
   const px = b.px == null ? 50 : b.px, py = b.py == null ? 50 : b.py;
@@ -55,15 +66,29 @@ function photoHTML(b){
         style="object-position:${px}% ${py}%;transform:scale(${b.zoom || 1});
         ${b.fx && FX[b.fx] && FX[b.fx][1] ? `filter:${FX[b.fx][1]};` : ""}">`
     : `<div class="ph">add a photo</div>`;
-  /* a SHAPE cuts the picture out; a torn FRAME tears the whole card,
-     mount and all, so the two clips go on different elements */
-  const cut = (b.shape && SHAPES[b.shape] && SHAPES[b.shape][1]) ? `clip-path:${SHAPES[b.shape][1]};` : "";
-  const tear = (!cut && b.frame === "torn") ? `clip-path:${torn(b.id, 2.6)};` : "";
-  const bd = b.bw ? `border:${b.bw}px ${esc(b.bs||"solid")} ${esc(b.bc||"#2A2520")};` : "";
-  const cap = b.frame === "polaroid" ? `<div class="pcap">${esc(b.caption||"")}</div>` : "";
-  return `<div class="b-photo fit-${esc(b.fit||"cover")} fr-${esc(b.frame||"none")}"
-    style="position:absolute;inset:0;border-radius:${b.radius||0}px;${tear}">
-    <div class="pwrap" style="${cut}${bd}">${inner}${penOverlay(b)}</div>${cap}</div>`;
+  /* CUTTING TO A SHAPE CUTS THE WHOLE CARD. Clipping only the picture
+     left the card's own ground — grey with no frame, white with a mount —
+     standing behind the oval as a rectangle, which is not a cut-out at
+     all. So the same path clips the card, the edge and the picture. */
+  const shape = (b.shape && SHAPES[b.shape] && SHAPES[b.shape][1]) ? SHAPES[b.shape][1] : "";
+  const cut = shape ? `clip-path:${shape};` : "";
+  const card = shape ? cut : (b.frame === "torn" ? `clip-path:${torn(b.id, 2.6)};` : "");
+  /* the edge is a BAND OF COLOUR behind the picture, not a CSS border:
+     a border is always a rectangle and cannot bend round an oval */
+  const edge = b.bw ? `background:${esc(b.bc||"#2A2520")};padding:${b.bw}px;` : "";
+  const capOn = b.caption && b.capOff !== 1;
+  const cap = capOn
+    ? `<div class="pcap" style="font-family:${faceCSS(b.capFont||"hand")};
+        font-size:${b.capSize||14}px;text-align:${esc(b.capAlign||"center")};
+        color:${esc(b.capColor||"#3A352C")}">${esc(b.caption)}</div>`
+    : "";
+  const rad0 = (!shape && b.frame !== "torn" && b.radius) ? `border-radius:${b.radius}px;` : "";
+  return `<div class="b-photo${shape?" cut":""} fit-${esc(b.fit||"cover")} fr-${esc(b.frame||"none")}"
+    style="position:absolute;inset:0">
+    <div class="pcard" style="${card}${rad0}">
+      <div class="pedge" style="${cut}${rad0}${edge}">
+        <div class="pwrap" style="${cut}${rad0}">${inner}</div></div>
+    </div>${penOverlay(b)}${cap}</div>`;
 }
 
 /* ── CROPPING ────────────────────────────────────────────────
@@ -81,6 +106,29 @@ function setInkTo(id){
   if (id){ setTool("pen"); toast("Drawing on the photograph — the marks belong to it and travel with it.", 4600); }
   else setTool("select");
   drawTools();
+}
+
+/* ── WARM THE TYPE ───────────────────────────────────────────
+   A web font is only fetched when something is painted in it. The type
+   kit menu was the FIRST use of eight of these faces, so it drew every
+   specimen in the fallback and every kit looked identical — the picker
+   was showing the one thing it exists to distinguish. Asking for them
+   at boot means the menu is right the first time it is opened.      */
+function warmFaces(){
+  if (!document.fonts || !document.fonts.load) return;
+  const fams = Object.values(FACES).map(v => v[1].split(",")[0].replace(/["']/g, "").trim());
+  Promise.all(fams.map(f => document.fonts.load(`24px "${f}"`).catch(() => null)))
+    .then(() => { if (NB) drawBlocks(); })
+    .catch(() => {});
+}
+
+/* More than one line, anywhere words are set into a shape. A single-line
+   field cannot say what a two-line stamp says. */
+async function linesOf(b, key, title){
+  const v = await askArea(title, "One line per line.", b[key] || "");
+  if (v == null) return;
+  snap(); b[key] = v.replace(/\n{3,}/g, "\n\n").replace(/\s+$/, "");
+  dirty(); drawBlocks(); drawSel(); drawTools();
 }
 
 /* ── ONE PLACE FOR IN AND OUT ────────────────────────────────

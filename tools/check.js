@@ -64,6 +64,7 @@ function stub(path){
     has(){ return true; }
   });
 }
+let ctx = null;
 if (parsed){
   const doc = stub("document");
   const sandbox = {
@@ -86,12 +87,36 @@ if (parsed){
   };
   sandbox.window = sandbox; sandbox.self = sandbox; sandbox.globalThis = sandbox;
   try {
-    parsed.runInNewContext(sandbox, {timeout: 10000});
+    ctx = vm.createContext(sandbox);
+    parsed.runInContext(ctx, {timeout: 10000});
     ok("the app script runs — every top-level statement completed");
   } catch (e) {
+    ctx = null;
     fail("the script THROWS at load: " + e.message +
          "\n         Everything after that line is dead — the page comes up as an empty shell.");
   }
+}
+
+/* ── a style="…" attribute cannot contain a double quote ────
+   `faceCSS` returned '"Amatic SC", …' and every renderer wrote it into
+   style="…". The attribute ended at that first quote, font-family was
+   thrown away, and EVERY face on the page fell back to the body font —
+   so the type kit appeared to do nothing at all. Same trap as url("…"),
+   which already has a check; this is the other half of it.           */
+if (ctx){
+  try {
+    const bad = vm.runInContext(
+      `Object.keys(FACES).map(k => [k, faceCSS(k)]).filter(p => p[1].includes('"'))`,
+      ctx, {timeout: 5000});
+    bad.length
+      ? fail(`${bad.length} typeface(s) quoted with " — they go into style="…" and ` +
+             `close it, losing the family: ` + bad.map(p => p[0]).join(", "))
+      : ok("every typeface is apostrophe-quoted — survives a style attribute");
+    const ts = vm.runInContext(`textStyle({role:"header", kit:"Postcard"})`, ctx, {timeout: 5000});
+    ts.includes('"')
+      ? fail('textStyle() emits a double quote — it is written into style="…"')
+      : ok("textStyle() output survives a style attribute");
+  } catch (e) { fail("could not inspect the type system: " + e.message); }
 }
 
 /* ── nothing is declared twice ──────────────────────────────

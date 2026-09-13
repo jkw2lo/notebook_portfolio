@@ -185,9 +185,14 @@ $("#canvas").addEventListener("pointerup", () => {
       });
       const host = INKTO && byId(INKTO);
       if (host){                       /* the marks travel with the picture */
-        const pts = STROKE.map(p => { const l = toLocal(host, p[0], p[1]); return [l.x, l.y]; });
+        /* kept as a fraction of the picture, not in its pixels, so
+           resizing later stretches the mark instead of moving it */
+        const hw = host.w || 1, hh = host.h || 30, K = PEN_VB;
+        const pts = STROKE.map(p => { const l = toLocal(host, p[0], p[1]);
+          return [+(l.x/hw*K).toFixed(1), +(l.y/hh*K).toFixed(1)]; });
         snap();
-        (host.pen = host.pen || []).push({pts, color:PEN.color, width:PEN.width, kind:PEN.kind});
+        (host.pen = host.pen || []).push({pts, n:1, color:PEN.color,
+          width:+(PEN.width/hw*K).toFixed(1), kind:PEN.kind});
         dirty(); drawBlocks();
       } else {
         snap(); putBlocks([b], {x:x0, y:y0}); dirty(); drawBlocks(); drawSide();

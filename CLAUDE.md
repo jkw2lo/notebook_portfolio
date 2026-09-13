@@ -161,6 +161,35 @@ works.
 **Torn edges are seeded from the block id** (`torn()` over `rng(hash(id))`). Random each render
 and the tear reshuffles every time you nudge the scrap.
 
+**A `style="…"` attribute cannot contain a double quote — and typefaces are full of them.**
+`faceCSS` returned `'"Amatic SC", "Bradley Hand", cursive'` and every renderer wrote it straight
+into `style="…"`. The attribute ended at that first quote, `font-family` was discarded, and
+**every face on the page fell back to the body font** — which is why the type kit looked like it
+changed nothing, for its whole life. `FACES` is apostrophe-quoted now and `check.js` asserts it,
+alongside the `url("…")` check that is the same trap in the other half of the CSS.
+
+**A web font is only fetched when something is painted in it.** The type-kit menu was the first
+use of eight of the thirteen faces, so it drew every specimen in the fallback and every kit
+looked identical — the picker showing the one thing it exists to distinguish. `warmFaces()` asks
+for them at boot.
+
+**Text size changes the TEXT, not the box.** The slider writes `b.size` and nothing else. An
+earlier go grew `b.w`/`b.h` to match, which read as the piece resizing itself out from under you;
+Jennifer asked for it removed in as many words. Instead the frames that wrap words **hug their
+words**: `.b-markwrap` holds the position and `.b-mark` inside it is sized by its own text, with
+the border in `em`. That is why a stamp can be set to 60px and still look like a stamp.
+
+**A shape cuts the whole CARD, not just the picture.** Clipping only the image left `.b-photo`'s
+own ground — grey with no mount, white with one — standing behind the oval as a rectangle, which
+is not a cut-out at all. The same path clips the card, the edge and the picture. The **edge is a
+band of colour behind the picture, never a CSS `border`**: a border is always a rectangle and
+cannot bend round an oval. And the **caption lives outside the clip**, or an oval crops its own
+words off.
+
+**Marks drawn on a photograph are stored as a fraction of it (0–1000), not in its pixels.**
+Stored in pixels they were re-read against whatever size the block happened to be later, so
+resizing a picture slid its marks off it.
+
 **Every block that shows text must read its own `size`.** `sealHTML` did not, so the control
 appeared to do nothing. If a block has a size field, the renderer uses it.
 

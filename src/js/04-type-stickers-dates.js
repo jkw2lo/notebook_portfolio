@@ -6,20 +6,25 @@
    Named so the picker reads like a drawer of type, not a CSS
    stack. Every one carries a real fallback.                   */
 const FACES = {
-  disp:   ["Newsreader",       '"Newsreader", Georgia, serif'],
-  body:   ["Karla",            '"Karla", system-ui, sans-serif'],
-  mono:   ["IBM Plex Mono",    '"IBM Plex Mono", ui-monospace, Menlo, monospace'],
-  hand:   ["Shantell",         '"Shantell Sans", "Bradley Hand", cursive'],
-  type:   ["Typewriter",       '"Special Elite", "Courier New", monospace'],
-  fraun:  ["Fraunces",         '"Fraunces", Georgia, serif'],
-  instr:  ["Instrument",       '"Instrument Serif", Georgia, serif'],
-  corm:   ["Cormorant",        '"Cormorant Garamond", Georgia, serif'],
-  bebas:  ["Bebas",            '"Bebas Neue", Impact, sans-serif'],
-  black:  ["Archivo Black",    '"Archivo Black", Helvetica, sans-serif'],
-  caveat: ["Caveat",           '"Caveat", "Bradley Hand", cursive'],
-  amatic: ["Amatic",           '"Amatic SC", "Bradley Hand", cursive'],
-  courier:["Courier Prime",    '"Courier Prime", "Courier New", monospace']
+  disp:   ["Newsreader",       "'Newsreader', Georgia, serif"],
+  body:   ["Karla",            "'Karla', system-ui, sans-serif"],
+  mono:   ["IBM Plex Mono",    "'IBM Plex Mono', ui-monospace, Menlo, monospace"],
+  hand:   ["Shantell",         "'Shantell Sans', 'Bradley Hand', cursive"],
+  type:   ["Typewriter",       "'Special Elite', 'Courier New', monospace"],
+  fraun:  ["Fraunces",         "'Fraunces', Georgia, serif"],
+  instr:  ["Instrument",       "'Instrument Serif', Georgia, serif"],
+  corm:   ["Cormorant",        "'Cormorant Garamond', Georgia, serif"],
+  bebas:  ["Bebas",            "'Bebas Neue', Impact, sans-serif"],
+  black:  ["Archivo Black",    "'Archivo Black', Helvetica, sans-serif"],
+  caveat: ["Caveat",           "'Caveat', 'Bradley Hand', cursive"],
+  amatic: ["Amatic",           "'Amatic SC', 'Bradley Hand', cursive"],
+  courier:["Courier Prime",    "'Courier Prime', 'Courier New', monospace"]
 };
+/* APOSTROPHES, not double quotes. Every one of these is written into a
+   style="…" attribute, and a double quote there CLOSES the attribute — so
+   font-family was discarded everywhere and every face fell back to the
+   body font. The type kit looked like it changed nothing because the
+   family never survived the attribute. Same trap as url("…").        */
 const faceCSS = k => (FACES[k] || FACES.body)[1];
 
 

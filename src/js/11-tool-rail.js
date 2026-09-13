@@ -82,6 +82,14 @@ function insertHTML(){
     <button class="btn ghost" id="t-tmpl">▤ Template ▾</button>`;
 }
 
+/* Text size is a SLIDER, and it changes the TEXT — never the box the
+   text sits in. An earlier go grew the block to match, which read as the
+   piece resizing itself out from under you. The frames that wrap words
+   are drawn in `em`, so they follow the type on their own. */
+const sizeField = v => `<span class="lbl">Size</span>
+  <input type="range" min="6" max="120" step="1" data-p="size" value="${v}">
+  <span class="lbl" data-szv>${Math.round(v)}px</span>`;
+
 function propsHTML(arr){
   const b = arr[0], many = arr.length > 1;
   const sw = (list, key) => list.map(c => `<button class="ico" data-swatch="${c}" data-swk="${key||"color"}"
@@ -93,7 +101,7 @@ function propsHTML(arr){
       s += `<select class="fld" data-p="role" style="width:104px">${Object.keys(ROLES).map(r =>
           `<option value="${r}" ${(b.role||"body")===r?"selected":""}>${esc(ROLES[r][0])}</option>`).join("")}</select>
         <button class="btn ghost" data-act="type">Aa ${esc(NB.kit||"Bench")} ▾</button>
-        <input class="fld" type="number" min="8" max="240" style="width:60px" data-p="size" value="${roleSize(b)}">
+        ${sizeField(roleSize(b))}
         <div class="seg" data-p="align">${["left","center","right"].map(v=>
           `<button data-v="${v}" aria-pressed="${(b.align||"left")===v}">${v[0].toUpperCase()}</button>`).join("")}</div>
         <input type="color" data-p="color" value="${esc(b.color||"#171512")}" aria-label="Text colour">
@@ -103,30 +111,54 @@ function propsHTML(arr){
         <button class="ico" data-act="ital" aria-pressed="${!!b.ital}" title="Italic"><i>I</i></button>`;
     }
     if (b.t === "photo"){
-      s += `<button class="btn ${b.src?"ghost":"pri"}" data-act="replace">
+      /* grouped the way the work goes: the picture itself, then the
+         shape it is cut to, then the edge round it, then its colour,
+         then the caption under it */
+      s += `<span class="lbl">Picture</span>
+        <button class="btn ${b.src?"ghost":"pri"}" data-act="replace">
           ${b.src ? "Replace photo" : "＋ Add my photo"}</button>
         <button class="btn ghost" data-act="crop" aria-pressed="${CROP===b.id}">✥ Crop</button>
-        <button class="btn ghost" data-act="drawon" aria-pressed="${INKTO===b.id}">✎ Draw on it</button>
-        ${b.pen && b.pen.length ? `<button class="btn ghost" data-act="wipe">Rub out marks</button>` : ""}
-        <span class="sep"></span>
-        <select class="fld" data-p="shape">${Object.keys(SHAPES).map(k =>
-          `<option value="${k}" ${(b.shape||"none")===k?"selected":""}>${SHAPES[k][0]}</option>`).join("")}</select>
-        <select class="fld" data-p="fx">${Object.keys(FX).map(k =>
-          `<option value="${k}" ${(b.fx||"none")===k?"selected":""}>${FX[k][0]}</option>`).join("")}</select>
-        <select class="fld" data-p="frame">${["none","mat","polaroid","torn"].map(v=>
-          `<option value="${v}" ${b.frame===v?"selected":""}>${v==="none"?"no frame":v}</option>`).join("")}</select>
-        <span class="sep"></span><span class="lbl">Zoom</span>
+        <span class="lbl">Zoom</span>
         <input type="range" min="100" max="400" data-p="zoomx" value="${Math.round((b.zoom||1)*100)}">
-        <span class="lbl">Edge</span>
-        <input type="range" min="0" max="26" data-p="bw" value="${b.bw||0}">
-        <input type="color" data-p="bc" value="${esc(b.bc||"#2A2520")}" aria-label="Edge colour">
         <div class="seg" data-p="fit">${["cover","contain"].map(v=>
           `<button data-v="${v}" aria-pressed="${(b.fit||"cover")===v}">${v}</button>`).join("")}</div>
-        <input class="fld" style="width:120px" data-p="caption" placeholder="Caption" value="${esc(b.caption||"")}">
-        <span class="lbl">Round</span><input type="range" min="0" max="60" data-p="radius" value="${b.radius||0}">`;
+
+        <span class="sep"></span><span class="lbl">Shape</span>
+        <select class="fld" data-p="shape">${Object.keys(SHAPES).map(k =>
+          `<option value="${k}" ${(b.shape||"none")===k?"selected":""}>${SHAPES[k][0]}</option>`).join("")}</select>
+        <select class="fld" data-p="frame">${["none","mat","polaroid","torn"].map(v=>
+          `<option value="${v}" ${b.frame===v?"selected":""}>${v==="none"?"no mount":v}</option>`).join("")}</select>
+        ${(b.shape && b.shape !== "none") || b.frame === "torn" ? "" :
+          `<span class="lbl">Round</span>
+           <input type="range" min="0" max="60" data-p="radius" value="${b.radius||0}">`}
+
+        <span class="sep"></span><span class="lbl">Edge</span>
+        <input type="range" min="0" max="26" data-p="bw" value="${b.bw||0}" title="Edge width">
+        <input type="color" data-p="bc" value="${esc(b.bc||"#2A2520")}" aria-label="Edge colour">
+
+        <span class="sep"></span><span class="lbl">Colour</span>
+        <select class="fld" data-p="fx">${Object.keys(FX).map(k =>
+          `<option value="${k}" ${(b.fx||"none")===k?"selected":""}>${FX[k][0]}</option>`).join("")}</select>
+
+        <span class="sep"></span><span class="lbl">Marks</span>
+        <button class="btn ghost" data-act="drawon" aria-pressed="${INKTO===b.id}">✎ Draw on it</button>
+        ${b.pen && b.pen.length ? `<button class="btn ghost" data-act="wipe">Rub out</button>` : ""}
+
+        <span class="sep"></span><span class="lbl">Caption</span>
+        <input class="fld" style="width:130px" data-p="caption" placeholder="Say something"
+          value="${esc(b.caption||"")}">
+        <button class="ico" data-p="capOff" data-toggle="1" aria-pressed="${b.capOff!==1}"
+          title="${b.capOff===1?"Show the caption":"Hide the caption"}">${b.capOff===1?"◌":"●"}</button>
+        ${b.capOff === 1 ? "" : `
+          <select class="fld" style="width:104px" data-p="capFont">${Object.keys(FACES).map(k =>
+            `<option value="${k}" ${(b.capFont||"hand")===k?"selected":""}>${esc(FACES[k][0])}</option>`).join("")}</select>
+          <input type="range" min="7" max="48" data-p="capSize" value="${b.capSize||14}" title="Caption size">
+          <div class="seg" data-p="capAlign">${["left","center","right"].map(v=>
+            `<button data-v="${v}" aria-pressed="${(b.capAlign||"center")===v}">${v[0].toUpperCase()}</button>`).join("")}</div>
+          <input type="color" data-p="capColor" value="${esc(b.capColor||"#3A352C")}" aria-label="Caption colour">`}`;
     }
     if (b.t === "note") s += sw(NOTE_COLORS) +
-      `<input class="fld" type="number" min="10" max="60" style="width:60px" data-p="size" value="${b.size||16}">`;
+      `${sizeField(b.size||16)}`;
     if (b.t === "scrap") s += sw(SCRAP_COLORS) + `<span class="lbl">torn edges, seeded to this scrap</span>`;
     if (b.t === "ribbon" || b.t === "tape"){
       s += sw(b.t === "tape" ? ["#D9CBA8","#C9D8C4","#E4C3BC","#C3CEE0","#E8DCC0","#EADFC2"] : RIBBON_COLORS);
@@ -147,14 +179,19 @@ function propsHTML(arr){
         `<span class="lbl">${esc(skName(b.key||""))}</span>`;
     }
     if (b.t === "mark"){
-      s += `<input class="fld" style="width:112px" data-p="text" value="${esc(b.text||"")}">
+      s += `<input class="fld" style="width:112px" data-p="text" value="${esc((b.text||"").split("\n")[0])}">
+        <button class="btn ghost" data-act="marktext">Lines…</button>
         <select class="fld" data-p="style">${["box","rnd","ban","bst"].map(v =>
           `<option value="${v}" ${(b.style||"box")===v?"selected":""}>${
             {box:"framed",rnd:"round",ban:"banner",bst:"burst"}[v]}</option>`).join("")}</select>
         ${b.style === "rnd" ? `<input class="fld" style="width:96px" data-p="sub"
           placeholder="small line" value="${esc(b.sub||"")}">` : ""}
+        <div class="seg" data-p="align">${["left","center","right"].map(v=>
+          `<button data-v="${v}" aria-pressed="${(b.align||"center")===v}">${v[0].toUpperCase()}</button>`).join("")}</div>
         <input type="color" data-p="color" value="${esc(b.color||"#8A2B2B")}" aria-label="Ink">
-        <input class="fld" type="number" min="8" max="60" style="width:58px" data-p="size" value="${b.size||20}">
+        ${sizeField(b.size||20)}
+        <span class="lbl">Border</span>
+        <input type="range" min="0" max="30" data-p="bord" value="${b.bord==null?16:b.bord}">
         <div class="chips">${MARKS.map(m => `<button class="chipb" data-mark="${m}">${m}</button>`).join("")}</div>`;
     }
     if (b.t === "time"){
@@ -162,53 +199,57 @@ function propsHTML(arr){
           style="width:56px" data-p="from" value="${b.from==null?6:b.from}">
         <span class="lbl">to</span><input class="fld" type="number" min="1" max="30"
           style="width:56px" data-p="to" value="${b.to==null?22:b.to}">
-        <input type="color" data-p="color" value="${esc(b.color||"#8A8175")}" aria-label="Rule colour"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||10}" title="Text size">`;
+        <input type="color" data-p="color" value="${esc(b.color||"#8A8175")}" aria-label="Rule colour">${sizeField(b.size||10)}`;
     }
     if (b.t === "month"){
       const d = new Date();
       const yy = b.y || d.getFullYear(), mm = (b.m == null ? d.getMonth() : b.m) + 1;
       s += `<input class="fld" type="month" style="width:146px" data-p="ym"
           value="${yy}-${String(mm).padStart(2,"0")}" aria-label="Month and year">
-        <input type="color" data-p="color" value="${esc(b.color||"#2B2720")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||9}" title="Text size"><span class="lbl">click a day on the page to ring it</span>`;
+        <input type="color" data-p="color" value="${esc(b.color||"#2B2720")}" aria-label="Ink">${sizeField(b.size||9)}<span class="lbl">click a day on the page to ring it</span>`;
     }
     if (b.t === "track"){
       s += `<input class="fld" style="width:112px" data-p="title" placeholder="Title" value="${esc(b.title||"")}">
         <button class="btn ghost" data-act="trackrows">Edit rows…</button>
         <span class="lbl">Days</span><input class="fld" type="number" min="3" max="31" style="width:56px"
           data-p="cols" value="${b.cols||14}">
-        <input type="color" data-p="color" value="${esc(b.color||"#3F5A46")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||9}" title="Text size">`;
+        <input type="color" data-p="color" value="${esc(b.color||"#3F5A46")}" aria-label="Ink">${sizeField(b.size||9)}`;
     }
     if (b.t === "mood"){
       s += `<div class="seg" data-p="kind">${["face","weather"].map(v =>
         `<button data-v="${v}" aria-pressed="${(b.kind||"face")===v}">${v}</button>`).join("")}</div>
-        <input class="fld" style="width:100px" data-p="title" placeholder="Label" value="${esc(b.title||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||20}" title="Text size"><span class="lbl">tap one on the page to choose it</span>`;
+        <input class="fld" style="width:100px" data-p="title" placeholder="Label" value="${esc(b.title||"")}">${sizeField(b.size||20)}<span class="lbl">tap one on the page to choose it</span>`;
     }
     if (b.t === "rate"){
       s += `<span class="lbl">Of</span><input class="fld" type="number" min="3" max="10" style="width:56px"
           data-p="n" value="${b.n||5}">
-        <input type="color" data-p="color" value="${esc(b.color||"#C4903C")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||22}" title="Text size"><span class="lbl">tap a star on the page</span>`;
+        <input type="color" data-p="color" value="${esc(b.color||"#C4903C")}" aria-label="Ink">${sizeField(b.size||22)}<span class="lbl">tap a star on the page</span>`;
     }
     if (b.t === "quote"){
       s += `<input class="fld" style="width:200px" data-p="text" value="${esc(b.text||"")}">
         <input class="fld" style="width:120px" data-p="by" placeholder="— who said it" value="${esc(b.by||"")}">
-        <input type="color" data-p="color" value="${esc(b.color||"#4A453D")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||15}" title="Text size">`;
+        <input type="color" data-p="color" value="${esc(b.color||"#4A453D")}" aria-label="Ink">${sizeField(b.size||15)}`;
     }
     if (b.t === "tag"){
       s += `<input class="fld" style="width:150px" data-p="text" placeholder="Written on the tag" value="${esc(b.text||"")}">
         ${sw(SCRAP_COLORS)}
-        <input class="fld" type="number" min="9" max="40" style="width:58px" data-p="size" value="${b.size||15}">`;
+        ${sizeField(b.size||15)}`;
     }
     if (b.t === "ticket"){
       s += `<input class="fld" style="width:38px" data-p="stub" value="${esc(b.stub||"")}" aria-label="Stub">
         <input class="fld" style="width:150px" data-p="t1" placeholder="Where from" value="${esc(b.t1||"")}">
-        <input class="fld" style="width:150px" data-p="t2" placeholder="What it was" value="${esc(b.t2||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||14}" title="Text size">`;
+        <input class="fld" style="width:150px" data-p="t2" placeholder="What it was" value="${esc(b.t2||"")}">${sizeField(b.size||14)}`;
     }
     if (b.t === "stamp"){
       s += `<button class="btn ${b.src?"ghost":"pri"}" data-act="replace">
-          ${b.src ? "Replace photo" : "＋ Add my photo"}</button><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||12}" title="Text size">
+          ${b.src ? "Replace photo" : "＋ Add my photo"}</button>${sizeField(b.size||12)}
         <input type="color" data-p="color" value="${esc(b.color||"#8FA9B8")}" aria-label="Stamp colour">
         <input class="fld" style="width:44px" data-p="val" placeholder="5" value="${esc(b.val||"")}">
-        <input class="fld" style="width:120px" data-p="cap" placeholder="Caption" value="${esc(b.cap||"")}">`;
+        <input class="fld" style="width:120px" data-p="cap" placeholder="Caption"
+          value="${esc((b.cap||"").split("\n")[0])}">
+        <button class="btn ghost" data-act="captext">Lines…</button>
+        <div class="seg" data-p="align">${["left","center","right"].map(v=>
+          `<button data-v="${v}" aria-pressed="${(b.align||"center")===v}">${v[0].toUpperCase()}</button>`).join("")}</div>`;
     }
     if (b.t === "date"){
       s += `<select class="fld" data-p="fmt">${Object.keys(DATE_FMTS).map(k =>
@@ -230,29 +271,29 @@ function propsHTML(arr){
     }
     if (b.t === "seal") s += `<input type="color" data-p="color" value="${esc(b.color||"#8E2B3E")}" aria-label="Wax">
       <input class="fld" style="width:74px" data-p="text" placeholder="JL" value="${esc(b.text||"")}">
-      <input class="fld" type="number" min="8" max="48" style="width:58px" data-p="size" value="${b.size||18}">`;
+      ${sizeField(b.size||18)}`;
     if (b.t === "env") s += sw(SCRAP_COLORS) +
-      `<input class="fld" style="width:140px" data-p="text" placeholder="Written on it" value="${esc(b.text||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||12}" title="Text size">`;
+      `<input class="fld" style="width:140px" data-p="text" placeholder="Written on it" value="${esc(b.text||"")}">${sizeField(b.size||12)}`;
     if (b.t === "lace") s += sw(["#FBF7EE","#F4E8E4","#EDF0F4","#F2EEE2","#E8DCC4"]);
     if (b.t === "clip") s += sw(["#8A9098","#C4A04E","#C4463C","#3F5A6B","#2A2520"]);
     if (b.t === "libcard") s += `<input class="fld" style="width:140px" data-p="title" value="${esc(b.title||"")}">
       <span class="lbl">Lines</span><input class="fld" type="number" min="2" max="14" style="width:56px"
-        data-p="lines" value="${b.lines||6}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||9}" title="Text size">`;
+        data-p="lines" value="${b.lines||6}">${sizeField(b.size||9)}`;
     if (b.t === "post") s += `<button class="btn ${b.src?"ghost":"pri"}" data-act="replace">
       ${b.src ? "Replace photo" : "＋ Add my photo"}</button>`;
     if (b.t === "check"){
       s += `<button class="btn ghost" data-act="editlist">Edit items…</button>
-        <input class="fld" type="number" min="10" max="40" style="width:58px" data-p="size" value="${b.size||16}">
+        ${sizeField(b.size||16)}
         <span class="lbl">click a box on the page to tick it</span>`;
     }
     if (b.t === "swatch"){
       s += `<input type="color" data-p="color" value="${esc(b.color||"#8A6034")}" aria-label="Swatch colour">
         <input class="fld" style="width:112px" data-p="label" placeholder="Material" value="${esc(b.label||"")}">
-        <input class="fld" style="width:134px" data-p="spec" placeholder="3.2 mm · natural" value="${esc(b.spec||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||12}" title="Text size">`;
+        <input class="fld" style="width:134px" data-p="spec" placeholder="3.2 mm · natural" value="${esc(b.spec||"")}">${sizeField(b.size||12)}`;
     }
     if (b.t === "spec"){
       s += `<input class="fld" style="width:120px" data-p="title" placeholder="Title" value="${esc(b.title||"")}">
-        <button class="btn ghost" data-act="specedit">Edit rows…</button><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||10.5}" title="Text size">`;
+        <button class="btn ghost" data-act="specedit">Edit rows…</button>${sizeField(b.size||10.5)}`;
     }
     if (b.t === "stitch"){
       s += `<input type="color" data-p="color" value="${esc(b.color||"#8A6034")}" aria-label="Thread colour">
@@ -310,6 +351,10 @@ function wireTools(arr){
     const seg = e.target.closest(".seg [data-v]");
     if (seg){ const p = seg.closest("[data-p]").dataset.p;
       snap(); arr.forEach(b => b[p] = seg.dataset.v); dirty(); drawBlocks(); drawTools(); return; }
+    const tg = e.target.closest("[data-toggle]");
+    if (tg){ const k = tg.dataset.p;
+      snap(); arr.forEach(b => { b[k] = b[k] === 1 ? 0 : 1; });
+      dirty(); drawBlocks(); drawTools(); return; }
     const act = e.target.closest("[data-act]"); if (act) return doAct(act.dataset.act, arr);
     if (e.target.closest("#t-pen")) return setTool("pen");
     if (e.target.closest("#t-eph")) return kindMenu(e.target.closest("#t-eph"), EPHEMERA, "Ephemera");
@@ -328,17 +373,9 @@ function wireTools(arr){
   const live = e => {
     const p = e.target.dataset.p; if (!p) return;
     const v = (e.target.type === "number" || e.target.type === "range") ? +e.target.value : e.target.value;
-    const old = p === "size" ? (arr[0] && (arr[0].size || DEF_SIZE[arr[0].t])) : null;
     arr.forEach(b => {
       b[p] = v;
       if (p === "preset" || p === "size" || p === "font" || p === "caps" || p === "role") b.h = 0;
-      /* a piece whose box hugs its words grows with them — otherwise the
-         frame stays put and the letters climb out of it */
-      if (p === "size" && old && old > 4 && (HUGS.has(b.t) || HUGS_H.has(b.t))){
-        const k = v / old;
-        if (HUGS.has(b.t)) b.w = Math.max(20, Math.round(b.w * k));
-        b.h = Math.max(16, Math.round((b.h || 30) * k));
-      }
       if (p === "zoomx"){ b.zoom = v/100; delete b.zoomx; }
       if (p === "role"){ delete b.track; delete b.caps; delete b.ital; delete b.font;
         delete b.weight; delete b.color; delete b.size; }
@@ -352,8 +389,10 @@ function wireTools(arr){
       }
       if (p === "kind" && b.t === "shape") b.h = b.kind === "rule" ? 0 : (b.h || 120);
     });
+    if (p === "size"){ const rd = $("#tools [data-szv]");
+      if (rd) rd.textContent = Math.round(v) + "px"; }
     dirty(); drawBlocks(); drawSel();
-    if (["kind","frame","fill","fmt","style","role","shape","fx"].includes(p)) drawTools();
+    if (["kind","frame","fill","fmt","style","role","shape","fx","capOff"].includes(p)) drawTools();
   };
   t.oninput = e => { if (e.target.tagName !== "SELECT") live(e); };
   t.onchange = e => {
@@ -399,6 +438,8 @@ function doAct(a, arr){
   else if (a === "die"){ snap(); arr.forEach(b => b.die = b.die === false); }
   else if (a === "pickSticker"){ stickerSwap(arr[0]); return; }
   else if (a === "trackrows") return trackRows(arr[0]);
+  else if (a === "marktext") return linesOf(arr[0], "text", "What the stamp says");
+  else if (a === "captext")  return linesOf(arr[0], "cap",  "The stamp's caption");
   else if (a === "crop"){ setCrop(CROP === arr[0].id ? null : arr[0].id); return; }
   else if (a === "drawon"){ setInkTo(INKTO === arr[0].id ? null : arr[0].id); return; }
   else if (a === "wipe"){ snap(); arr.forEach(b => delete b.pen); }

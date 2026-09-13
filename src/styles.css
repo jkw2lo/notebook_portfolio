@@ -145,22 +145,37 @@ input[type=color]{width:26px; height:26px; padding:0; border:1px solid var(--lin
 #canvas.inking .blk .hit{display:none}
 
 /* ── block bodies ──────────────────────────────────────────── */
-.b-photo{overflow:hidden; background:#D9D4CA}
+/* A cut-out photograph is THREE nested clips of the same path — the
+   card (so its mount and ground follow the shape), the edge (a band of
+   colour, because a CSS border is a rectangle and cannot bend round an
+   oval), and the picture. Clipping only the picture is what left a grey
+   rectangle showing behind every oval. */
+/* The CARD is what gets cut to a shape; the caption is not part of it,
+   or an oval crops its own words off. So .b-photo is just a column —
+   card on top, caption under it — and every clip lives on the card. */
+.b-photo{overflow:visible; background:none; display:flex; flex-direction:column}
+.b-photo .pcard{position:relative; flex:1; min-height:0; background:#D9D4CA; overflow:hidden}
+.b-photo.cut .pcard{background:transparent}
+.b-photo .pedge{position:relative; width:100%; height:100%}
 .b-photo .pwrap{position:relative; width:100%; height:100%; overflow:hidden}
 .b-photo .pwrap img{width:100%; height:100%; display:block; transform-origin:center}
 .b-photo .pink{position:absolute; inset:0; width:100%; height:100%; overflow:visible;
-  pointer-events:none}
+  pointer-events:none; z-index:2}
 #canvas.cropping .blk .hit{cursor:move}
 .blk.crop .pwrap{outline:2px dashed var(--accent); outline-offset:-2px}
 .b-photo img{width:100%; height:100%; display:block}
 .b-photo.fit-cover img{object-fit:cover}
 .b-photo.fit-contain img{object-fit:contain}
-.b-photo.fr-mat{background:#fff; padding:11px; box-shadow:var(--shadow-2)}
-.b-photo.fr-polaroid{background:#fff; padding:11px 11px 40px; box-shadow:var(--shadow-2)}
-.b-photo.fr-polaroid .pcap{position:absolute; left:11px; right:11px; bottom:9px; text-align:center;
-  font-family:var(--f-hand); font-size:14px; color:#3A352C; overflow:hidden; white-space:nowrap;
-  text-overflow:ellipsis}
-.b-photo.fr-torn{background:#FFFDF8; padding:9px; box-shadow:var(--shadow-2)}
+/* a drop-shadow follows the cut outline; a box-shadow stays a rectangle */
+.b-photo.fr-mat, .b-photo.fr-polaroid, .b-photo.fr-torn{
+  filter:drop-shadow(0 2px 4px rgba(20,25,23,.22))}
+.b-photo.fr-mat .pcard{background:#fff; padding:11px}
+.b-photo.fr-polaroid .pcard{background:#fff; padding:11px}
+.b-photo.fr-torn .pcard{background:#FFFDF8; padding:9px}
+/* a caption is not the polaroid's alone — any picture can carry one */
+.b-photo .pcap{flex:none; padding:4px 2px; font-family:var(--f-hand); font-size:14px;
+  line-height:1.25; color:#3A352C; overflow:hidden}
+.b-photo.fr-polaroid .pcap{background:#fff; padding:7px 11px 12px}
 .b-photo .ph{position:absolute; inset:0; display:grid; place-items:center; text-align:center;
   background:repeating-linear-gradient(45deg,#E3DDD1 0 9px,#DAD3C5 9px 18px);
   color:#8C8474; font-family:var(--f-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase}
@@ -248,7 +263,7 @@ input[type=color]{width:26px; height:26px; padding:0; border:1px solid var(--lin
 .b-stamp{font-size:12px}
 .b-stamp .val{position:absolute; left:6px; top:5px; font-family:var(--f-type); font-size:1em;
   color:#FFF; text-shadow:0 1px 2px rgba(0,0,0,.7)}
-.b-stamp .cap{position:absolute; left:0; right:0; bottom:4px; text-align:center;
+.b-stamp .cap{position:absolute; left:4px; right:4px; bottom:4px; line-height:1.2;
   font-family:var(--f-mono); font-size:.67em; letter-spacing:.12em; text-transform:uppercase; color:#FFF;
   text-shadow:0 1px 2px rgba(0,0,0,.75)}
 
@@ -403,20 +418,28 @@ body.present #ptitle{display:block}
 .b-quote .q{font-family:var(--f-disp); font-style:italic; font-size:1em; line-height:1.45}
 .b-quote .by{font-family:var(--f-mono); font-size:.58em; letter-spacing:.16em; text-transform:uppercase; opacity:.65}
 
-.b-mark{display:grid; place-items:center; text-align:center; opacity:.8; font-family:var(--f-type);
-  letter-spacing:.08em; line-height:1.05}
-.b-mark .t{padding:0 .3em}
-.b-mark.box{border:.16em solid currentColor; border-radius:.16em;
-  box-shadow:inset 0 0 0 .1em transparent, inset 0 0 0 .24em currentColor}
-.b-mark.rnd{border:.16em solid currentColor; border-radius:50%; box-shadow:inset 0 0 0 .24em currentColor}
+/* The frame belongs to the WORDS, not to the box they sit in. It used
+   to be `inset:0`, so the border was the block rectangle and setting the
+   type bigger did nothing to it — or overflowed it. The wrapper holds
+   the position; the stamp inside is sized by its own text. */
+.b-markwrap{display:grid; place-items:center; overflow:hidden}
+.b-mark{display:inline-block; max-width:100%; text-align:center; opacity:.8;
+  font-family:var(--f-type); letter-spacing:.08em; line-height:1.15}
+.b-mark .t{display:block; padding:.12em .42em}
+.b-mark.box{border:var(--bord,.16em) solid currentColor; border-radius:.16em;
+  box-shadow:inset 0 0 0 .09em transparent, inset 0 0 0 calc(.09em + var(--bord,.16em) * .34) currentColor}
+.b-mark.rnd{border:var(--bord,.16em) solid currentColor; border-radius:50%;
+  box-shadow:inset 0 0 0 calc(var(--bord,.16em) * 1.5) currentColor;
+  display:grid; place-items:center; aspect-ratio:1; padding:.5em}
 .b-mark.rnd .sub{display:block; font-family:var(--f-mono); font-size:.42em; letter-spacing:.22em; opacity:.85}
-.b-mark.ban{background:currentColor; clip-path:polygon(0 0,100% 0,100% 100%,0 100%,7% 50%)}
+.b-mark.ban{background:currentColor; clip-path:polygon(0 0,100% 0,100% 100%,0 100%,7% 50%);
+  padding:.24em .55em .24em 1em}
 .b-mark.ban .t{color:#FFF8F0; mix-blend-mode:normal}
 .b-mark.bst{clip-path:polygon(50% 0,60% 14%,74% 5%,77% 21%,93% 19%,88% 34%,100% 43%,87% 52%,
   97% 65%,82% 69%,85% 85%,70% 81%,66% 97%,53% 88%,42% 99%,35% 84%,20% 90%,20% 74%,4% 73%,
   13% 60%,1% 50%,14% 40%,6% 27%,22% 24%,20% 8%,35% 13%,40% 0);
-  background:currentColor}
-.b-mark.bst .t{color:#FFF8F0; font-size:.78em}
+  background:currentColor; display:grid; place-items:center; aspect-ratio:1; padding:1.15em}
+.b-mark.bst .t{color:#FFF8F0; font-size:.78em; padding:0}
 
 .prow .badge{font-family:var(--f-mono); font-size:8px; letter-spacing:.12em; text-transform:uppercase;
   color:var(--on-accent); background:var(--muted); border-radius:3px; padding:1px 4px; flex:none}
@@ -502,8 +525,9 @@ body.objs-open #objs{display:flex}
   border:1px solid var(--line) !important; border-radius:8px; background:var(--chrome); overflow:hidden}
 .kitcard:hover{border-color:var(--accent) !important; background:var(--accent-soft) !important}
 .kitcard.on{border-color:var(--accent) !important; box-shadow:inset 0 0 0 1px var(--accent)}
-.kitcard .hd,.kitcard .bd,.kitcard .cp{white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  display:block}
+.kitcard .hd,.kitcard .ti,.kitcard .bd,.kitcard .cp{white-space:nowrap; overflow:hidden;
+  text-overflow:ellipsis; display:block}
+.kitcard .hd{line-height:1.05; margin-bottom:1px}
 .kitcard .cp{opacity:.7}
 .rolelist{padding:3px}
 .rolelist button{gap:12px !important}
