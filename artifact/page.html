@@ -151,6 +151,12 @@ input[type=color]{width:26px; height:26px; padding:0; border:1px solid var(--lin
 
 /* ── block bodies ──────────────────────────────────────────── */
 .b-photo{overflow:hidden; background:#D9D4CA}
+.b-photo .pwrap{position:relative; width:100%; height:100%; overflow:hidden}
+.b-photo .pwrap img{width:100%; height:100%; display:block; transform-origin:center}
+.b-photo .pink{position:absolute; inset:0; width:100%; height:100%; overflow:visible;
+  pointer-events:none}
+#canvas.cropping .blk .hit{cursor:move}
+.blk.crop .pwrap{outline:2px dashed var(--accent); outline-offset:-2px}
 .b-photo img{width:100%; height:100%; display:block}
 .b-photo.fit-cover img{object-fit:cover}
 .b-photo.fit-contain img{object-fit:contain}
@@ -181,18 +187,20 @@ input[type=color]{width:26px; height:26px; padding:0; border:1px solid var(--lin
 .b-swatch{display:flex; flex-direction:column; background:#fff; box-shadow:var(--shadow-2); overflow:hidden}
 .b-swatch .chip{flex:1; min-height:0}
 .b-swatch .meta{padding:8px 10px; border-top:1px solid rgba(0,0,0,.09)}
-.b-swatch .nm{font-family:var(--f-ui); font-weight:700; font-size:12px; color:#171512;
+.b-swatch{font-size:12px}
+.b-swatch .nm{font-family:var(--f-ui); font-weight:700; font-size:1em; color:#171512;
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.b-swatch .sp{font-family:var(--f-mono); font-size:9.5px; color:#6B655B; letter-spacing:.06em;
+.b-swatch .sp{font-family:var(--f-mono); font-size:.8em; color:#6B655B; letter-spacing:.06em;
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 
 .b-spec{background:#fff; box-shadow:var(--shadow-2); padding:13px 15px; overflow:hidden}
-.b-spec h4{margin:0 0 9px; font-family:var(--f-disp); font-size:15px; font-weight:600;
+.b-spec{font-size:10.5px}
+.b-spec h4{margin:0 0 .85em; font-family:var(--f-disp); font-size:1.42em; font-weight:600;
   color:#171512; border-bottom:1px solid #171512; padding-bottom:7px}
-.b-spec table{width:100%; border-collapse:collapse; font-family:var(--f-mono); font-size:10.5px}
+.b-spec table{width:100%; border-collapse:collapse; font-family:var(--f-mono); font-size:1em}
 .b-spec td{padding:5px 0; border-bottom:1px solid #E7E2D8; color:#171512; vertical-align:top}
 .b-spec td:first-child{color:#7C766B; letter-spacing:.08em; text-transform:uppercase;
-  font-size:9px; padding-right:14px; white-space:nowrap; padding-top:6px}
+  font-size:.86em; padding-right:14px; white-space:nowrap; padding-top:6px}
 .b-spec td:last-child{text-align:right; font-variant-numeric:tabular-nums}
 
 .b-shape{width:100%; height:100%}
@@ -219,13 +227,14 @@ input[type=color]{width:26px; height:26px; padding:0; border:1px solid var(--lin
         radial-gradient(circle 7px at 100% 50%, transparent 98%, #000);
   -webkit-mask-composite:source-in; mask:radial-gradient(circle 7px at 0 50%, transparent 98%, #000),
         radial-gradient(circle 7px at 100% 50%, transparent 98%, #000); mask-composite:intersect}
+.b-ticket{font-size:14px}
 .b-ticket .stub{width:31%; border-right:2px dashed rgba(0,0,0,.3); display:grid; place-items:center;
-  font-family:var(--f-type); font-size:19px; color:#5A4A28; flex:none}
+  font-family:var(--f-type); font-size:1.36em; color:#5A4A28; flex:none}
 .b-ticket .body{flex:1; padding:8px 11px; display:flex; flex-direction:column; justify-content:center;
   gap:3px; min-width:0}
-.b-ticket .t1{font-family:var(--f-type); font-size:14px; color:#3B3220; overflow:hidden;
+.b-ticket .t1{font-family:var(--f-type); font-size:1em; color:#3B3220; overflow:hidden;
   text-overflow:ellipsis; white-space:nowrap}
-.b-ticket .t2{font-family:var(--f-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase;
+.b-ticket .t2{font-family:var(--f-mono); font-size:.64em; letter-spacing:.14em; text-transform:uppercase;
   color:#8A7850; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 
 .b-stamp{position:absolute; inset:0; padding:7px; background:#fff;
@@ -241,19 +250,20 @@ input[type=color]{width:26px; height:26px; padding:0; border:1px solid var(--lin
   filter:drop-shadow(0 2px 3px rgba(0,0,0,.22))}
 .b-stamp .in{width:100%; height:100%; display:grid; place-items:center; overflow:hidden; position:relative}
 .b-stamp .in img{width:100%; height:100%; object-fit:cover}
-.b-stamp .val{position:absolute; left:6px; top:5px; font-family:var(--f-type); font-size:12px;
+.b-stamp{font-size:12px}
+.b-stamp .val{position:absolute; left:6px; top:5px; font-family:var(--f-type); font-size:1em;
   color:#FFF; text-shadow:0 1px 2px rgba(0,0,0,.7)}
 .b-stamp .cap{position:absolute; left:0; right:0; bottom:4px; text-align:center;
-  font-family:var(--f-mono); font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:#FFF;
+  font-family:var(--f-mono); font-size:.67em; letter-spacing:.12em; text-transform:uppercase; color:#FFF;
   text-shadow:0 1px 2px rgba(0,0,0,.75)}
 
 .b-ribbon{position:absolute; inset:0; box-shadow:0 2px 5px rgba(0,0,0,.2)}
 .b-ribbon::after{content:""; position:absolute; inset:0;
   background:linear-gradient(180deg, rgba(255,255,255,.42), transparent 42%, rgba(0,0,0,.14))}
 
-.b-date{position:absolute; inset:0; display:grid; place-items:center; padding:6px 10px;
+.b-date{position:absolute; inset:0; display:grid; place-items:center; padding:.3em .5em;
   font-family:var(--f-type); text-align:center; line-height:1.15; opacity:.82;
-  border:2.5px solid currentColor; border-radius:4px}
+  border:.14em solid currentColor; border-radius:.2em}
 .b-date .d{font-size:inherit; letter-spacing:.05em}
 .b-date .w{font-family:var(--f-mono); font-size:.44em; letter-spacing:.2em; text-transform:uppercase;
   opacity:.8; margin-top:3px}
@@ -360,8 +370,8 @@ body.present #ptitle{display:block}
 
 .b-month{font-family:var(--f-mono); padding:8px 9px; display:flex; flex-direction:column; gap:5px;
   z-index:2; pointer-events:none}
-.b-month .mh{font-family:var(--f-disp); font-size:14px; font-weight:600; text-align:center}
-.b-month .mg{display:grid; grid-template-columns:repeat(7,1fr); gap:2px; flex:1; font-size:9px}
+.b-month .mh{font-family:var(--f-disp); font-size:1.55em; font-weight:600; text-align:center}
+.b-month .mg{display:grid; grid-template-columns:repeat(7,1fr); gap:2px; flex:1; font-size:1em}
 .b-month .mg i{display:grid; place-items:center; border-radius:50%; aspect-ratio:1; font-style:normal}
 .b-month .mg i.w{opacity:.45; font-size:8px}
 .b-month .mg i.d{pointer-events:auto; cursor:pointer}
@@ -370,8 +380,8 @@ body.present #ptitle{display:block}
 
 .b-track{font-family:var(--f-mono); padding:9px 10px; display:flex; flex-direction:column; gap:4px;
   z-index:2; pointer-events:none}
-.b-track .th{font-family:var(--f-hand); font-size:14px; margin-bottom:2px}
-.b-track .tl{display:flex; align-items:center; gap:7px; font-size:9px}
+.b-track .th{font-family:var(--f-hand); font-size:1.55em; margin-bottom:2px}
+.b-track .tl{display:flex; align-items:center; gap:7px; font-size:1em}
 .b-track .tl .nm{width:64px; flex:none; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
   letter-spacing:.06em; text-transform:uppercase; opacity:.75}
 .b-track .cells{display:flex; gap:2.5px; flex:1}
@@ -383,27 +393,27 @@ body.present #ptitle{display:block}
   z-index:2; pointer-events:none}
 .b-mood .ml{font-family:var(--f-mono); font-size:9px; letter-spacing:.13em; text-transform:uppercase;
   opacity:.6; margin-right:4px}
-.b-mood i{font-style:normal; font-size:20px; opacity:.38; pointer-events:auto; cursor:pointer;
+.b-mood i{font-style:normal; font-size:1em; opacity:.38; pointer-events:auto; cursor:pointer;
   line-height:1; padding:2px}
 .b-mood i.on{opacity:1; transform:scale(1.22)}
 
 .b-rate{display:flex; align-items:center; justify-content:center; gap:3px;
   z-index:2; pointer-events:none}
-.b-rate i{font-style:normal; font-size:22px; opacity:.26; pointer-events:auto; cursor:pointer; line-height:1}
+.b-rate i{font-style:normal; font-size:1em; opacity:.26; pointer-events:auto; cursor:pointer; line-height:1}
 .b-rate i.on{opacity:1}
 
 .b-quote{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
   padding:10px 16px; text-align:center; border-top:1px solid currentColor;
   border-bottom:1px solid currentColor}
-.b-quote .q{font-family:var(--f-disp); font-style:italic; font-size:15px; line-height:1.45}
-.b-quote .by{font-family:var(--f-mono); font-size:8.5px; letter-spacing:.16em; text-transform:uppercase; opacity:.65}
+.b-quote .q{font-family:var(--f-disp); font-style:italic; font-size:1em; line-height:1.45}
+.b-quote .by{font-family:var(--f-mono); font-size:.58em; letter-spacing:.16em; text-transform:uppercase; opacity:.65}
 
 .b-mark{display:grid; place-items:center; text-align:center; opacity:.8; font-family:var(--f-type);
   letter-spacing:.08em; line-height:1.05}
 .b-mark .t{padding:0 .3em}
-.b-mark.box{border:3px solid currentColor; border-radius:3px; box-shadow:inset 0 0 0 2px transparent,
-  inset 0 0 0 4.5px currentColor}
-.b-mark.rnd{border:3px solid currentColor; border-radius:50%; box-shadow:inset 0 0 0 4.5px currentColor}
+.b-mark.box{border:.16em solid currentColor; border-radius:.16em;
+  box-shadow:inset 0 0 0 .1em transparent, inset 0 0 0 .24em currentColor}
+.b-mark.rnd{border:.16em solid currentColor; border-radius:50%; box-shadow:inset 0 0 0 .24em currentColor}
 .b-mark.rnd .sub{display:block; font-family:var(--f-mono); font-size:.42em; letter-spacing:.22em; opacity:.85}
 .b-mark.ban{background:currentColor; clip-path:polygon(0 0,100% 0,100% 100%,0 100%,7% 50%)}
 .b-mark.ban .t{color:#FFF8F0; mix-blend-mode:normal}
@@ -554,8 +564,9 @@ body.objs-open #objs{display:flex}
   border-left:solid transparent; border-right:solid transparent; border-top-style:solid;
   border-left-width:50%; border-right-width:50%; border-top-width:52%;
   filter:brightness(.93)}
+.b-env{font-size:12px}
 .b-env .lbl{position:absolute; left:10%; right:10%; bottom:12%; text-align:center;
-  font-size:12px; color:#4A4034; letter-spacing:.1em; text-transform:uppercase}
+  font-size:1em; color:#4A4034; letter-spacing:.1em; text-transform:uppercase}
 .b-lace{box-shadow:0 1px 3px rgba(0,0,0,.14);
   -webkit-mask:radial-gradient(circle 9px at 10px 100%, transparent 96%, #000) 0 0/20px 100% repeat-x,
     linear-gradient(#000,#000) 0 0/100% calc(100% - 9px) no-repeat;
@@ -565,7 +576,8 @@ body.objs-open #objs{display:flex}
   background:radial-gradient(circle 3px at 10px 10px, rgba(0,0,0,.09) 96%, transparent 0) 0 0/20px 20px}
 .b-card{background:#F6F1E2; box-shadow:var(--shadow-2); padding:10px 12px; overflow:hidden;
   border-top:14px solid #C9563F}
-.b-card .hd{font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:#8A7850;
+.b-card{font-size:9px}
+.b-card .hd{font-size:1em; letter-spacing:.18em; text-transform:uppercase; color:#8A7850;
   border-bottom:1px solid #C9BFA6; padding-bottom:5px; margin-bottom:7px}
 .b-card .rows{display:flex; flex-direction:column; gap:11px}
 .b-card .rows i{display:block; height:1px; background:#C9BFA6}
@@ -581,8 +593,8 @@ body.objs-open #objs{display:flex}
 .b-post .lines i{display:block; height:1px; background:#D4C9AE}
 
 .b-date.plain{border:0}
-.b-date.round{border:3px solid currentColor; border-radius:50%;
-  box-shadow:inset 0 0 0 4.5px currentColor}
+.b-date.round{border:.16em solid currentColor; border-radius:50%;
+  box-shadow:inset 0 0 0 .24em currentColor}
 .b-date.banner{background:currentColor; clip-path:polygon(0 0,100% 0,100% 100%,0 100%,7% 50%)}
 .b-date.banner .d,.b-date.banner .w{color:#FFF8F0}
 .b-date.burst{background:currentColor; clip-path:polygon(50% 0,60% 14%,74% 5%,77% 21%,93% 19%,
@@ -715,6 +727,7 @@ body.ruled #world{margin:0}
   <span class="eyebrow" id="savedat" hidden></span>
   <button class="btn ghost" id="savewarn" hidden></button>
   <button class="btn ghost" id="b-objs" aria-pressed="false">☰ Objects</button>
+  <button class="btn ghost" id="b-share">⇪ Export ▾</button>
   <button class="btn ghost" id="b-help" aria-label="Keyboard shortcuts">?</button>
   <button class="btn" id="b-present">▶ Present</button>
   <button class="btn pri" id="b-save">Save</button>
@@ -912,7 +925,7 @@ function timeHTML(b){
       <span class="hn">${String(hr % 24).padStart(2,"0")}</span><i></i></div>`);
     if (i < n) rows.push(`<div class="tr half" style="top:${((i+.5)/n*100).toFixed(3)}%"><i></i></div>`);
   }
-  return `<div class="b-time" style="position:absolute;inset:0;color:${esc(b.color||"#8A8175")}">${rows.join("")}</div>`;
+  return `<div class="b-time" style="position:absolute;inset:0;font-size:${b.size||10}px;color:${esc(b.color||"#8A8175")}">${rows.join("")}</div>`;
 }
 function monthHTML(b){
   const d = new Date(), y = b.y || d.getFullYear(), m = b.m == null ? d.getMonth() : b.m;
@@ -923,14 +936,14 @@ function monthHTML(b){
   for (let i = 0; i < lead; i++) cells.push(`<i></i>`);
   for (let dd = 1; dd <= days; dd++)
     cells.push(`<i class="d ${on.has(dd)?"on":""}" data-day="${dd}">${dd}</i>`);
-  return `<div class="b-month" style="position:absolute;inset:0;color:${esc(b.color||"#2B2720")}">
+  return `<div class="b-month" style="position:absolute;inset:0;font-size:${b.size||9}px;color:${esc(b.color||"#2B2720")}">
     <div class="mh">${first.toLocaleDateString(undefined,{month:"long",year:"numeric"})}</div>
     <div class="mg">${["M","T","W","T","F","S","S"].map(w=>`<i class="w">${w}</i>`).join("")}${cells.join("")}</div></div>`;
 }
 function trackHTML(b){
   const rows = b.rows || ["Habit"], cols = b.cols || 14, on = b.on || [];
   const set = new Set(on.map(p => p[0] + ":" + p[1]));
-  return `<div class="b-track" style="position:absolute;inset:0;color:${esc(b.color||"#2B2720")}">
+  return `<div class="b-track" style="position:absolute;inset:0;font-size:${b.size||9}px;color:${esc(b.color||"#2B2720")}">
     ${b.title ? `<div class="th">${esc(b.title)}</div>` : ""}
     ${rows.map((r,ri) => `<div class="tl"><span class="nm">${esc(r)}</span>
       <span class="cells">${Array.from({length:cols},(_,ci) =>
@@ -938,17 +951,17 @@ function trackHTML(b){
 }
 function moodHTML(b){
   const set = b.kind === "weather" ? WX : MOODS;
-  return `<div class="b-mood" style="position:absolute;inset:0;color:${esc(b.color||"#2B2720")}">
+  return `<div class="b-mood" style="position:absolute;inset:0;font-size:${b.size||20}px;color:${esc(b.color||"#2B2720")}">
     ${b.title ? `<span class="ml">${esc(b.title)}</span>` : ""}
     ${set.map((g,i) => `<i class="${b.pick===i?"on":""}" data-pick="${i}">${g}</i>`).join("")}</div>`;
 }
 function rateHTML(b){
   const n = b.n || 5;
-  return `<div class="b-rate" style="position:absolute;inset:0;color:${esc(b.color||"#C4903C")}">
+  return `<div class="b-rate" style="position:absolute;inset:0;font-size:${b.size||22}px;color:${esc(b.color||"#C4903C")}">
     ${Array.from({length:n},(_,i) => `<i class="${i < (b.v||0) ? "on":""}" data-star="${i}">★</i>`).join("")}</div>`;
 }
 function quoteHTML(b){
-  return `<div class="b-quote" style="position:absolute;inset:0;color:${esc(b.color||"#4A453D")}">
+  return `<div class="b-quote" style="position:absolute;inset:0;font-size:${b.size||15}px;color:${esc(b.color||"#4A453D")}">
     <span class="q">${esc(b.text||"")}</span>
     ${b.by ? `<span class="by">${esc(b.by)}</span>` : ""}</div>`;
 }
@@ -1386,7 +1399,7 @@ function sealHTML(b){
 }
 function envHTML(b){
   const c = esc(b.color || "#E8DCC4");
-  return `<div class="b-env" style="position:absolute;inset:0;background:${c}">
+  return `<div class="b-env" style="position:absolute;inset:0;font-size:${b.size||12}px;background:${c}">
     <div class="flap" style="border-top-color:${c}"></div>
     <div class="lbl" style="font-family:${faceCSS(b.font||"type")}">${esc(b.text||"")}</div></div>`;
 }
@@ -1395,7 +1408,7 @@ function laceHTML(b){
   return `<div class="b-lace" style="position:absolute;inset:0;background:${c}"></div>`;
 }
 function cardHTML(b){
-  return `<div class="b-card" style="position:absolute;inset:0">
+  return `<div class="b-card" style="position:absolute;inset:0;font-size:${b.size||9}px">
     <div class="hd" style="font-family:${faceCSS("mono")}">${esc(b.title||"")}</div>
     <div class="rows">${Array.from({length:b.lines||6},()=>`<i></i>`).join("")}</div></div>`;
 }
@@ -1520,6 +1533,7 @@ function drawBlocks(){
       el.style.cssText = `left:${b.x}px;top:${b.y}px;width:${b.w}px;` +
         (auto && !b.h ? "" : `height:${b.h}px;`) + `transform:rotate(${b.rot||0}deg)`;
       if (isLocked(b)) el.classList.add("lk");
+      if (b.id === CROP) el.classList.add("crop");
       el.innerHTML = blockHTML(b) + `<div class="hit"></div>`;
       if (b.x + b.w < -4 || b.y + (b.h||30) < -4 || b.x > pw+4 || b.y > ph+4) el.classList.add("off");
       host.appendChild(el);
@@ -2511,14 +2525,7 @@ function inkPath(b){
 
 function blockHTML(b){
   switch (b.t){
-    case "photo": {
-      const inner = b.src ? `<img src="${esc(b.src)}" alt="${esc(b.caption||"")}" draggable="false">`
-                          : `<div class="ph">drop a photo</div>`;
-      const cap = b.frame === "polaroid" ? `<div class="pcap">${esc(b.caption||"")}</div>` : "";
-      const clip = b.frame === "torn" ? `clip-path:${torn(b.id, 2.6)};` : "";
-      return `<div class="b-photo fit-${esc(b.fit||"cover")} fr-${esc(b.frame||"none")}"
-        style="position:absolute;inset:0;border-radius:${b.radius||0}px;${clip}">${inner}${cap}</div>`;
-    }
+    case "photo": return photoHTML(b);
     case "text":
       return `<div class="b-text" style="position:absolute;inset:0;${textStyle(b)}
         text-align:${esc(b.align||"left")}">${esc(b.text||"")}</div>`;
@@ -2526,12 +2533,12 @@ function blockHTML(b){
       return `<div class="b-note" style="position:absolute;inset:0;background:${esc(b.color||NOTE_COLORS[0])};
         font-size:${b.size||16}px">${esc(b.text||"")}</div>`;
     case "swatch":
-      return `<div class="b-swatch" style="position:absolute;inset:0">
+      return `<div class="b-swatch" style="position:absolute;inset:0;font-size:${b.size||12}px">
         <div class="chip" style="background:${esc(b.color||"#8A6034")}"></div>
         <div class="meta"><div class="nm">${esc(b.label||"Material")}</div>
         <div class="sp">${esc(b.spec||"")}</div></div></div>`;
     case "spec":
-      return `<div class="b-spec" style="position:absolute;inset:0">
+      return `<div class="b-spec" style="position:absolute;inset:0;font-size:${b.size||10.5}px">
         ${b.title ? `<h4>${esc(b.title)}</h4>` : ""}
         <table><tbody>${(b.rows||[]).map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("")}</tbody></table></div>`;
     case "shape": {
@@ -2562,11 +2569,11 @@ function blockHTML(b){
         <span class="eyelet"></span>
         <div class="txt" style="font-size:${b.size||15}px">${esc(b.text||"")}</div></div>`;
     case "ticket":
-      return `<div class="b-ticket"><div class="stub">${esc(b.stub||"01")}</div>
+      return `<div class="b-ticket" style="font-size:${b.size||14}px"><div class="stub">${esc(b.stub||"01")}</div>
         <div class="body"><div class="t1">${esc(b.t1||"")}</div>
         <div class="t2">${esc(b.t2||"")}</div></div></div>`;
     case "stamp":
-      return `<div class="b-stamp"><div class="in" style="background:${esc(b.color||"#8FA9B8")}">
+      return `<div class="b-stamp" style="font-size:${b.size||12}px"><div class="in" style="background:${esc(b.color||"#8FA9B8")}">
         ${b.src ? `<img src="${esc(b.src)}" alt="" draggable="false">` : ""}
         <span class="val">${esc(b.val||"")}</span>
         <span class="cap">${esc(b.cap||"")}</span></div></div>`;
@@ -2608,7 +2615,13 @@ function blockHTML(b){
   return "";
 }
 
-const AUTO_H = b => b.t === "text" || b.t === "stitch" || (b.t === "shape" && b.kind === "rule");
+/* a frame drawn round words has to grow when the words do — but a band
+   that spans the page keeps its width and only gets taller */
+const HUGS = new Set(["mark","date","seal","tag","swatch","ticket","stamp","libcard","env"]);
+const HUGS_H = new Set(["quote","spec","check","track","month","mood","rate","time"]);
+const DEF_SIZE = {mark:20, date:19, seal:18, tag:15, swatch:12, ticket:14, stamp:12,
+  libcard:9, env:12, quote:15, spec:10.5, check:16, track:9, month:9, mood:20, rate:22, time:10};
+const AUTO_H = b = b.t === "text" || b.t === "stitch" || (b.t === "shape" && b.kind === "rule");
 /* things whose own controls sit on the page and must take a click */
 const LIVE_BITS = "[data-ck],[data-day],[data-cell],[data-pick],[data-star]";
 const OPEN_SHAPES = ["solid","dashed","dotted","double"];
@@ -2740,12 +2753,26 @@ function propsHTML(arr){
         <button class="ico" data-act="ital" aria-pressed="${!!b.ital}" title="Italic"><i>I</i></button>`;
     }
     if (b.t === "photo"){
-      s += `<button class="btn ghost" data-act="replace">Replace</button>
-        <div class="seg" data-p="fit">${["cover","contain"].map(v=>
-          `<button data-v="${v}" aria-pressed="${(b.fit||"cover")===v}">${v}</button>`).join("")}</div>
+      s += `<button class="btn ${b.src?"ghost":"pri"}" data-act="replace">
+          ${b.src ? "Replace photo" : "＋ Add my photo"}</button>
+        <button class="btn ghost" data-act="crop" aria-pressed="${CROP===b.id}">✥ Crop</button>
+        <button class="btn ghost" data-act="drawon" aria-pressed="${INKTO===b.id}">✎ Draw on it</button>
+        ${b.pen && b.pen.length ? `<button class="btn ghost" data-act="wipe">Rub out marks</button>` : ""}
+        <span class="sep"></span>
+        <select class="fld" data-p="shape">${Object.keys(SHAPES).map(k =>
+          `<option value="${k}" ${(b.shape||"none")===k?"selected":""}>${SHAPES[k][0]}</option>`).join("")}</select>
+        <select class="fld" data-p="fx">${Object.keys(FX).map(k =>
+          `<option value="${k}" ${(b.fx||"none")===k?"selected":""}>${FX[k][0]}</option>`).join("")}</select>
         <select class="fld" data-p="frame">${["none","mat","polaroid","torn"].map(v=>
           `<option value="${v}" ${b.frame===v?"selected":""}>${v==="none"?"no frame":v}</option>`).join("")}</select>
-        <input class="fld" style="width:126px" data-p="caption" placeholder="Caption" value="${esc(b.caption||"")}">
+        <span class="sep"></span><span class="lbl">Zoom</span>
+        <input type="range" min="100" max="400" data-p="zoomx" value="${Math.round((b.zoom||1)*100)}">
+        <span class="lbl">Edge</span>
+        <input type="range" min="0" max="26" data-p="bw" value="${b.bw||0}">
+        <input type="color" data-p="bc" value="${esc(b.bc||"#2A2520")}" aria-label="Edge colour">
+        <div class="seg" data-p="fit">${["cover","contain"].map(v=>
+          `<button data-v="${v}" aria-pressed="${(b.fit||"cover")===v}">${v}</button>`).join("")}</div>
+        <input class="fld" style="width:120px" data-p="caption" placeholder="Caption" value="${esc(b.caption||"")}">
         <span class="lbl">Round</span><input type="range" min="0" max="60" data-p="radius" value="${b.radius||0}">`;
     }
     if (b.t === "note") s += sw(NOTE_COLORS) +
@@ -2785,39 +2812,36 @@ function propsHTML(arr){
           style="width:56px" data-p="from" value="${b.from==null?6:b.from}">
         <span class="lbl">to</span><input class="fld" type="number" min="1" max="30"
           style="width:56px" data-p="to" value="${b.to==null?22:b.to}">
-        <input type="color" data-p="color" value="${esc(b.color||"#8A8175")}" aria-label="Rule colour">`;
+        <input type="color" data-p="color" value="${esc(b.color||"#8A8175")}" aria-label="Rule colour"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||10}" title="Text size">`;
     }
     if (b.t === "month"){
       const d = new Date();
       const yy = b.y || d.getFullYear(), mm = (b.m == null ? d.getMonth() : b.m) + 1;
       s += `<input class="fld" type="month" style="width:146px" data-p="ym"
           value="${yy}-${String(mm).padStart(2,"0")}" aria-label="Month and year">
-        <input type="color" data-p="color" value="${esc(b.color||"#2B2720")}" aria-label="Ink">
-        <span class="lbl">click a day on the page to ring it</span>`;
+        <input type="color" data-p="color" value="${esc(b.color||"#2B2720")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||9}" title="Text size"><span class="lbl">click a day on the page to ring it</span>`;
     }
     if (b.t === "track"){
       s += `<input class="fld" style="width:112px" data-p="title" placeholder="Title" value="${esc(b.title||"")}">
         <button class="btn ghost" data-act="trackrows">Edit rows…</button>
         <span class="lbl">Days</span><input class="fld" type="number" min="3" max="31" style="width:56px"
           data-p="cols" value="${b.cols||14}">
-        <input type="color" data-p="color" value="${esc(b.color||"#3F5A46")}" aria-label="Ink">`;
+        <input type="color" data-p="color" value="${esc(b.color||"#3F5A46")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||9}" title="Text size">`;
     }
     if (b.t === "mood"){
       s += `<div class="seg" data-p="kind">${["face","weather"].map(v =>
         `<button data-v="${v}" aria-pressed="${(b.kind||"face")===v}">${v}</button>`).join("")}</div>
-        <input class="fld" style="width:100px" data-p="title" placeholder="Label" value="${esc(b.title||"")}">
-        <span class="lbl">tap one on the page to choose it</span>`;
+        <input class="fld" style="width:100px" data-p="title" placeholder="Label" value="${esc(b.title||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||20}" title="Text size"><span class="lbl">tap one on the page to choose it</span>`;
     }
     if (b.t === "rate"){
       s += `<span class="lbl">Of</span><input class="fld" type="number" min="3" max="10" style="width:56px"
           data-p="n" value="${b.n||5}">
-        <input type="color" data-p="color" value="${esc(b.color||"#C4903C")}" aria-label="Ink">
-        <span class="lbl">tap a star on the page</span>`;
+        <input type="color" data-p="color" value="${esc(b.color||"#C4903C")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||22}" title="Text size"><span class="lbl">tap a star on the page</span>`;
     }
     if (b.t === "quote"){
       s += `<input class="fld" style="width:200px" data-p="text" value="${esc(b.text||"")}">
         <input class="fld" style="width:120px" data-p="by" placeholder="— who said it" value="${esc(b.by||"")}">
-        <input type="color" data-p="color" value="${esc(b.color||"#4A453D")}" aria-label="Ink">`;
+        <input type="color" data-p="color" value="${esc(b.color||"#4A453D")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||15}" title="Text size">`;
     }
     if (b.t === "tag"){
       s += `<input class="fld" style="width:150px" data-p="text" placeholder="Written on the tag" value="${esc(b.text||"")}">
@@ -2827,10 +2851,11 @@ function propsHTML(arr){
     if (b.t === "ticket"){
       s += `<input class="fld" style="width:38px" data-p="stub" value="${esc(b.stub||"")}" aria-label="Stub">
         <input class="fld" style="width:150px" data-p="t1" placeholder="Where from" value="${esc(b.t1||"")}">
-        <input class="fld" style="width:150px" data-p="t2" placeholder="What it was" value="${esc(b.t2||"")}">`;
+        <input class="fld" style="width:150px" data-p="t2" placeholder="What it was" value="${esc(b.t2||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||14}" title="Text size">`;
     }
     if (b.t === "stamp"){
-      s += `<button class="btn ghost" data-act="replace">Photo</button>
+      s += `<button class="btn ${b.src?"ghost":"pri"}" data-act="replace">
+          ${b.src ? "Replace photo" : "＋ Add my photo"}</button><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||12}" title="Text size">
         <input type="color" data-p="color" value="${esc(b.color||"#8FA9B8")}" aria-label="Stamp colour">
         <input class="fld" style="width:44px" data-p="val" placeholder="5" value="${esc(b.val||"")}">
         <input class="fld" style="width:120px" data-p="cap" placeholder="Caption" value="${esc(b.cap||"")}">`;
@@ -2857,13 +2882,14 @@ function propsHTML(arr){
       <input class="fld" style="width:74px" data-p="text" placeholder="JL" value="${esc(b.text||"")}">
       <input class="fld" type="number" min="8" max="48" style="width:58px" data-p="size" value="${b.size||18}">`;
     if (b.t === "env") s += sw(SCRAP_COLORS) +
-      `<input class="fld" style="width:140px" data-p="text" placeholder="Written on it" value="${esc(b.text||"")}">`;
+      `<input class="fld" style="width:140px" data-p="text" placeholder="Written on it" value="${esc(b.text||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||12}" title="Text size">`;
     if (b.t === "lace") s += sw(["#FBF7EE","#F4E8E4","#EDF0F4","#F2EEE2","#E8DCC4"]);
     if (b.t === "clip") s += sw(["#8A9098","#C4A04E","#C4463C","#3F5A6B","#2A2520"]);
     if (b.t === "libcard") s += `<input class="fld" style="width:140px" data-p="title" value="${esc(b.title||"")}">
       <span class="lbl">Lines</span><input class="fld" type="number" min="2" max="14" style="width:56px"
-        data-p="lines" value="${b.lines||6}">`;
-    if (b.t === "post") s += `<button class="btn ghost" data-act="replace">Photo</button>`;
+        data-p="lines" value="${b.lines||6}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||9}" title="Text size">`;
+    if (b.t === "post") s += `<button class="btn ${b.src?"ghost":"pri"}" data-act="replace">
+      ${b.src ? "Replace photo" : "＋ Add my photo"}</button>`;
     if (b.t === "check"){
       s += `<button class="btn ghost" data-act="editlist">Edit items…</button>
         <input class="fld" type="number" min="10" max="40" style="width:58px" data-p="size" value="${b.size||16}">
@@ -2872,11 +2898,11 @@ function propsHTML(arr){
     if (b.t === "swatch"){
       s += `<input type="color" data-p="color" value="${esc(b.color||"#8A6034")}" aria-label="Swatch colour">
         <input class="fld" style="width:112px" data-p="label" placeholder="Material" value="${esc(b.label||"")}">
-        <input class="fld" style="width:134px" data-p="spec" placeholder="3.2 mm · natural" value="${esc(b.spec||"")}">`;
+        <input class="fld" style="width:134px" data-p="spec" placeholder="3.2 mm · natural" value="${esc(b.spec||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||12}" title="Text size">`;
     }
     if (b.t === "spec"){
       s += `<input class="fld" style="width:120px" data-p="title" placeholder="Title" value="${esc(b.title||"")}">
-        <button class="btn ghost" data-act="specedit">Edit rows…</button>`;
+        <button class="btn ghost" data-act="specedit">Edit rows…</button><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||10.5}" title="Text size">`;
     }
     if (b.t === "stitch"){
       s += `<input type="color" data-p="color" value="${esc(b.color||"#8A6034")}" aria-label="Thread colour">
@@ -2952,9 +2978,18 @@ function wireTools(arr){
   const live = e => {
     const p = e.target.dataset.p; if (!p) return;
     const v = (e.target.type === "number" || e.target.type === "range") ? +e.target.value : e.target.value;
+    const old = p === "size" ? (arr[0] && (arr[0].size || DEF_SIZE[arr[0].t])) : null;
     arr.forEach(b => {
       b[p] = v;
       if (p === "preset" || p === "size" || p === "font" || p === "caps" || p === "role") b.h = 0;
+      /* a piece whose box hugs its words grows with them — otherwise the
+         frame stays put and the letters climb out of it */
+      if (p === "size" && old && old > 4 && (HUGS.has(b.t) || HUGS_H.has(b.t))){
+        const k = v / old;
+        if (HUGS.has(b.t)) b.w = Math.max(20, Math.round(b.w * k));
+        b.h = Math.max(16, Math.round((b.h || 30) * k));
+      }
+      if (p === "zoomx"){ b.zoom = v/100; delete b.zoomx; }
       if (p === "role"){ delete b.track; delete b.caps; delete b.ital; delete b.font;
         delete b.weight; delete b.color; delete b.size; }
       if (p === "trackx"){ b.track = v/100; delete b.trackx; b.h = 0; }
@@ -2968,7 +3003,7 @@ function wireTools(arr){
       if (p === "kind" && b.t === "shape") b.h = b.kind === "rule" ? 0 : (b.h || 120);
     });
     dirty(); drawBlocks(); drawSel();
-    if (["kind","frame","fill","fmt","style","role"].includes(p)) drawTools();
+    if (["kind","frame","fill","fmt","style","role","shape","fx"].includes(p)) drawTools();
   };
   t.oninput = e => { if (e.target.tagName !== "SELECT") live(e); };
   t.onchange = e => {
@@ -3014,6 +3049,9 @@ function doAct(a, arr){
   else if (a === "die"){ snap(); arr.forEach(b => b.die = b.die === false); }
   else if (a === "pickSticker"){ stickerSwap(arr[0]); return; }
   else if (a === "trackrows") return trackRows(arr[0]);
+  else if (a === "crop"){ setCrop(CROP === arr[0].id ? null : arr[0].id); return; }
+  else if (a === "drawon"){ setInkTo(INKTO === arr[0].id ? null : arr[0].id); return; }
+  else if (a === "wipe"){ snap(); arr.forEach(b => delete b.pen); }
   else if (a === "replace"){ PICK_FOR = arr[0].id; $("#picker").click(); return; }
   else if (a === "specedit") return specEditor(arr[0]);
   else if (a === "editlist") return listEditor(arr[0]);
@@ -3261,6 +3299,17 @@ $("#canvas").addEventListener("pointerdown", e => {
 
   if (SPACE || e.button === 1){ MODE = "pan"; ORIG = {...W}; cv.classList.add("pan"); return; }
 
+  /* cropping: the frame stays, the picture moves inside it */
+  if (CROP){
+    const host = e.target.closest(".blk");
+    if (host && host.dataset.id === CROP){
+      const b = byId(CROP);
+      MODE = "crop"; ORIG = {b, px: b.px == null ? 50 : b.px, py: b.py == null ? 50 : b.py};
+      snap(); return;
+    }
+    setCrop(null);
+  }
+
   if (TOOL !== "select" && !RO){
     MODE = "ink"; STROKE = [[START.w.x, START.w.y]];
     $("#wet").innerHTML = `<path id="wetp" fill="none" stroke="${PEN.color}" stroke-width="${PEN.width}"
@@ -3320,6 +3369,17 @@ $("#canvas").addEventListener("pointermove", e => {
   const dx = e.clientX - START.sx, dy = e.clientY - START.sy;
 
   if (MODE === "pan"){ W.x = ORIG.x + dx; W.y = ORIG.y + dy; camApply(); return; }
+
+  if (MODE === "crop"){
+    const b = ORIG.b, z = Math.max(1, b.zoom || 1);
+    /* at 1× there is nothing to move; the further in, the more there is */
+    const span = 100 / Math.max(.001, z - 1 + .35);
+    b.px = clamp(ORIG.px - (dx / W.z / b.w) * span, 0, 100);
+    b.py = clamp(ORIG.py - (dy / W.z / (b.h||30)) * span, 0, 100);
+    const img = $(`.blk[data-id="${b.id}"] .pwrap img`);
+    if (img) img.style.objectPosition = `${b.px}% ${b.py}%`;
+    return;
+  }
 
   if (MODE === "ink"){
     const p = toWorld(e.clientX, e.clientY), last = STROKE[STROKE.length-1];
@@ -3411,10 +3471,19 @@ $("#canvas").addEventListener("pointerup", () => {
         vw: Math.round(w), vh: Math.round(h),
         color: PEN.color, width: PEN.width, kind: PEN.kind
       });
-      snap(); putBlocks([b], {x:x0, y:y0}); dirty(); drawBlocks(); drawSide();
+      const host = INKTO && byId(INKTO);
+      if (host){                       /* the marks travel with the picture */
+        const pts = STROKE.map(p => { const l = toLocal(host, p[0], p[1]); return [l.x, l.y]; });
+        snap();
+        (host.pen = host.pen || []).push({pts, color:PEN.color, width:PEN.width, kind:PEN.kind});
+        dirty(); drawBlocks();
+      } else {
+        snap(); putBlocks([b], {x:x0, y:y0}); dirty(); drawBlocks(); drawSide();
+      }
     }
     STROKE = null; MODE = null; return;
   }
+  if (MODE === "crop"){ dirty(); MODE = null; ORIG = null; return; }
   if (MODE === "move"){ rehomeBlocks(selArr()); }
   if (MODE === "move" || MODE === "size" || MODE === "rot"){ dirty(); drawBlocks(); drawSel(); drawSide(); }
   if (MODE === "marquee") drawTools();
@@ -3442,6 +3511,11 @@ $("#canvas").addEventListener("dblclick", e => {
 
 $("#canvas").addEventListener("wheel", e => {
   e.preventDefault();
+  if (CROP){
+    const b = byId(CROP);
+    if (b){ b.zoom = clamp((b.zoom || 1) * Math.exp(-e.deltaY * 0.0016), 1, 4);
+      dirty(); drawBlocks(); drawTools(); return; }
+  }
   const r = $("#canvas").getBoundingClientRect();
   const mx = e.clientX-r.left, my = e.clientY-r.top;
   if (e.ctrlKey || e.metaKey){                     /* a trackpad pinch arrives with ctrlKey */
@@ -3502,7 +3576,10 @@ addEventListener("keydown", e => {
     SEL = new Set(viewBlocks().filter(b => !isLocked(b)).map(b=>b.id)); drawSel(); drawTools(); return; }
   if (mod && e.key.toLowerCase() === "l"){ e.preventDefault(); if (SEL.size) toggleLock(selArr()); return; }
   if (mod) return;
-  if (e.key === "Escape"){ if (TOOL !== "select") setTool("select"); else { SEL.clear(); drawSel(); drawTools(); } return; }
+  if (e.key === "Escape"){
+    if (CROP) return setCrop(null);
+    if (INKTO) return setInkTo(null);
+    if (TOOL !== "select") setTool("select"); else { SEL.clear(); drawSel(); drawTools(); } return; }
   if ((e.key === "Backspace" || e.key === "Delete") && SEL.size){ e.preventDefault(); doAct("del", selArr()); return; }
   if (e.key.startsWith("Arrow") && SEL.size){
     e.preventDefault(); snap();
@@ -3543,7 +3620,7 @@ async function setPhoto(b, file){
     const {blob,w,h} = await shrink(file);
     if (b.src && b.src.startsWith("blob:")) URL.revokeObjectURL(b.src);
     snap(); b.src = URL.createObjectURL(blob); b.natW = w; b.natH = h;
-    BLOBS.set(b.id, blob); idbPut(b.id, blob); dirty(); drawBlocks(); drawSide();
+    BLOBS.set(b.id, blob); idbPut(b.id, blob); dirty(); drawBlocks(); drawSide(); drawTools();
   } catch(_){ toast("That file could not be read as an image."); }
 }
 async function dropFiles(files, at){
@@ -3697,6 +3774,7 @@ $("#b-objs").onclick = () => {
   drawObjs(); fitPage(true);
 };
 $("#objs-x").onclick = () => $("#b-objs").click();
+$("#b-share").onclick = e => shareMenu(e.currentTarget);
 wireObjs();
 
 /* ════ PRESENT ══════════════════════════════════════════════ */
@@ -3782,10 +3860,7 @@ $("#b-help").onclick = e => {
     <button><span class="gicon">🔒</span>Lock / unlock the selection<span class="k">⌘L</span></button>
     <button><span class="gicon">▦</span>Show / hide the stencil<span class="k">G</span></button>
     <button><span class="gicon">⊢</span>Rulers down the edges<span class="k">R</span></button>
-    <hr><button data-x="export"><span class="gicon">↓</span>Export notebook JSON</button>
-    <button data-x="import"><span class="gicon">↑</span>Import a notebook…</button>
-    <button data-x="pdf"><span class="gicon">⎙</span>Print / save as PDF</button>
-    <button data-x="stand"><span class="gicon">⇪</span>Export a standalone copy…</button>`,
+    <hr><div class="gl">Getting things in and out lives under Export in the top bar.</div>`,
     ev => {
       if (ev.target.closest('[data-x="export"]')){ closePop(); exportJSON(); }
       if (ev.target.closest('[data-x="import"]')){ closePop(); importJSON(); }
@@ -4228,4 +4303,220 @@ function tmplMenu(anchor){
     }
   });
 }
+/* ═══════════════════════════════════════════════════════════════
+   PART G — a photograph you can actually work on, and one place
+   to get things in and out.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── CUTTING A PHOTOGRAPH OUT ────────────────────────────────
+   A collage is not a grid of rectangles. These are the scissors:
+   a shape to cut to, a crop to push the subject around inside it,
+   a border, a treatment, and a pen that stays on the picture.  */
+const SHAPES = {
+  none:    ["Rectangle", ""],
+  round:   ["Rounded",   "inset(0 round 18px)"],
+  pill:    ["Pill",      "inset(0 round 999px)"],
+  circle:  ["Circle",    "circle(50% at 50% 50%)"],
+  ellipse: ["Oval",      "ellipse(50% 50% at 50% 50%)"],
+  arch:    ["Arch",      "polygon(0% 100%, 0% 42%, 8% 22%, 26% 7%, 50% 2%, 74% 7%, 92% 22%, 100% 42%, 100% 100%)"],
+  hex:     ["Hexagon",   "polygon(25% 2%, 75% 2%, 100% 50%, 75% 98%, 25% 98%, 0% 50%)"],
+  diamond: ["Diamond",   "polygon(50% 0, 100% 50%, 50% 100%, 0 50%)"],
+  star:    ["Star",      "polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)"],
+  heart:   ["Heart",     "path('M 150 280 C 30 190 10 120 55 70 C 90 30 140 45 150 85 C 160 45 210 30 245 70 C 290 120 270 190 150 280 Z')"],
+  blob:    ["Blob",      "polygon(28% 3%, 62% 0, 88% 16%, 100% 44%, 93% 74%, 70% 95%, 40% 100%, 13% 88%, 0 62%, 4% 30%)"],
+  scallop: ["Scalloped", "polygon(0% 12%,8% 4%,17% 12%,25% 4%,33% 12%,42% 4%,50% 12%,58% 4%,67% 12%,75% 4%,83% 12%,92% 4%,100% 12%,100% 88%,92% 96%,83% 88%,75% 96%,67% 88%,58% 96%,50% 88%,42% 96%,33% 88%,25% 96%,17% 88%,8% 96%,0% 88%)"]
+};
+const FX = {
+  none:   ["As it is",  ""],
+  bw:     ["Black & white", "grayscale(1) contrast(1.08)"],
+  high:   ["High contrast", "contrast(1.45) saturate(1.15)"],
+  faded:  ["Faded",     "saturate(.62) contrast(.9) brightness(1.08) sepia(.12)"],
+  warm:   ["Warm",      "sepia(.35) saturate(1.3) hue-rotate(-12deg)"],
+  cool:   ["Cool",      "saturate(1.1) hue-rotate(14deg) brightness(1.03)"],
+  ink:    ["Inky",      "grayscale(1) contrast(2.1) brightness(1.05)"],
+  bleach: ["Bleached",  "grayscale(.55) contrast(1.3) brightness(1.18)"],
+  night:  ["Night",     "grayscale(.4) contrast(1.2) brightness(.78) hue-rotate(190deg) saturate(1.4)"]
+};
+
+/* a point on the page, in the photograph's own upright frame */
+function toLocal(b, wx, wy){
+  const ox = oxOf(b.id);
+  const cx = ox + b.x + b.w/2, cy = b.y + (b.h||30)/2;
+  const t = -rad(b.rot || 0), dx = wx - cx, dy = wy - cy;
+  return {x: dx*Math.cos(t) - dy*Math.sin(t) + b.w/2,
+          y: dx*Math.sin(t) + dy*Math.cos(t) + (b.h||30)/2};
+}
+function penOverlay(b){
+  if (!b.pen || !b.pen.length) return "";
+  return `<svg class="pink" viewBox="0 0 ${b.w} ${b.h||30}" preserveAspectRatio="none">` +
+    b.pen.map(s => `<path d="${inkPath(s)}" fill="none" stroke="${esc(s.color||"#FFF")}"
+      stroke-width="${s.width||4}" stroke-linecap="round" stroke-linejoin="round"
+      ${s.kind === "marker" ? 'opacity="0.45"' : ""}/>`).join("") + `</svg>`;
+}
+function photoHTML(b){
+  const px = b.px == null ? 50 : b.px, py = b.py == null ? 50 : b.py;
+  const inner = b.src
+    ? `<img src="${esc(b.src)}" alt="${esc(b.caption||"")}" draggable="false"
+        style="object-position:${px}% ${py}%;transform:scale(${b.zoom || 1});
+        ${b.fx && FX[b.fx] && FX[b.fx][1] ? `filter:${FX[b.fx][1]};` : ""}">`
+    : `<div class="ph">add a photo</div>`;
+  /* a SHAPE cuts the picture out; a torn FRAME tears the whole card,
+     mount and all, so the two clips go on different elements */
+  const cut = (b.shape && SHAPES[b.shape] && SHAPES[b.shape][1]) ? `clip-path:${SHAPES[b.shape][1]};` : "";
+  const tear = (!cut && b.frame === "torn") ? `clip-path:${torn(b.id, 2.6)};` : "";
+  const bd = b.bw ? `border:${b.bw}px ${esc(b.bs||"solid")} ${esc(b.bc||"#2A2520")};` : "";
+  const cap = b.frame === "polaroid" ? `<div class="pcap">${esc(b.caption||"")}</div>` : "";
+  return `<div class="b-photo fit-${esc(b.fit||"cover")} fr-${esc(b.frame||"none")}"
+    style="position:absolute;inset:0;border-radius:${b.radius||0}px;${tear}">
+    <div class="pwrap" style="${cut}${bd}">${inner}${penOverlay(b)}</div>${cap}</div>`;
+}
+
+/* ── CROPPING ────────────────────────────────────────────────
+   The frame stays where you put it; the picture moves inside it.
+   Drag to push the subject about, scroll to come in closer.    */
+let CROP = null, INKTO = null;
+function setCrop(id){
+  CROP = id; INKTO = null;
+  $("#canvas").classList.toggle("cropping", !!CROP);
+  drawTools();
+  if (id) toast("Drag the picture to move it in its frame; scroll to zoom. Esc when it sits right.", 5000);
+}
+function setInkTo(id){
+  INKTO = id; CROP = null;
+  if (id){ setTool("pen"); toast("Drawing on the photograph — the marks belong to it and travel with it.", 4600); }
+  else setTool("select");
+  drawTools();
+}
+
+/* ── ONE PLACE FOR IN AND OUT ────────────────────────────────
+   Export and import were buried in the shortcut sheet, which is
+   the last place anybody looks for them.                      */
+function shareMenu(anchor){
+  popup(anchor, `<div class="gl">Take it out</div>
+    <button data-sx2="pdf"><span class="gicon">⎙</span>Print / save as PDF
+      <span class="k">choose pages</span></button>
+    <button data-sx2="stand"><span class="gicon">⇪</span>Standalone copy…
+      <span class="k">one HTML file</span></button>
+    <button data-sx2="json"><span class="gicon">↓</span>Export notebook JSON
+      <span class="k">to keep or move</span></button>
+    <hr><div class="gl">Bring one in</div>
+    <button data-sx2="import"><span class="gicon">↑</span>Import a notebook…
+      <span class="k">replaces this one</span></button>
+    <hr><div class="gl">A standalone copy carries the whole notebook and its
+      photographs in one file. It opens in any browser, turns its own pages and
+      prints — nothing to install and nothing to fetch.</div>`,
+  e => {
+    const x = e.target.closest("[data-sx2]"); if (!x) return;
+    closePop();
+    if (x.dataset.sx2 === "pdf") doPrint();
+    if (x.dataset.sx2 === "stand") exportStandalone();
+    if (x.dataset.sx2 === "json") exportJSON();
+    if (x.dataset.sx2 === "import") importJSON();
+  });
+}
+
+/* ── MORE TO STICK ON ────────────────────────────────────────
+   Cut-and-paste magazine: halftone, checkerboard, torn strips,
+   price tags, and faces drawn in line rather than filled.     */
+const SK_MORE = {
+  collage: {
+    halftone: ["Halftone", `<defs><pattern id="ht" width="13" height="13" patternUnits="userSpaceOnUse">
+      <circle cx="6.5" cy="6.5" r="4.6" fill="#2A2520"/></pattern></defs>
+      <circle cx="50" cy="50" r="46" fill="url(#ht)"/>`],
+    check:    ["Checker", `<g fill="#2A2520">${(()=>{let s="";for(let r=0;r<5;r++)for(let c=0;c<5;c++)
+      if((r+c)%2===0)s+=`<rect x="${c*20}" y="${r*20}" width="20" height="20"/>`;return s;})()}</g>`, "repeat"],
+    film:     ["Film strip", `<rect x="2" y="18" width="96" height="64" fill="#23211E"/>
+      <rect x="14" y="30" width="72" height="40" fill="#DCD6C8"/>
+      <g fill="#DCD6C8">${(()=>{let s="";for(let i=0;i<6;i++)s+=
+      `<rect x="${6+i*15}" y="21" width="8" height="6" rx="1"/><rect x="${6+i*15}" y="73" width="8" height="6" rx="1"/>`;
+      return s;})()}</g>`, "repeat"],
+    torn:     ["Torn strip", `<path d="M0 30 12 24 24 32 37 25 49 33 62 26 74 34 87 27 100 34v34l-13 7-13-7-12 8-13-7-12 7-13-8-12 7-12-6Z" fill="#E8DCC4"/>`, "repeat"],
+    barcode:  ["Barcode", `<g fill="#1E1B16">${(()=>{let s="",x=6;
+      [4,2,6,2,3,7,2,4,2,8,3,2,6,2,4].forEach(w=>{s+=`<rect x="${x}" y="22" width="${w}" height="48"/>`;x+=w+3;});
+      return s;})()}</g><rect x="6" y="74" width="88" height="2" fill="#1E1B16"/>`],
+    tagprice: ["Price tag", `<path d="M6 44 46 6h46a6 6 0 0 1 6 6v46L58 96a6 6 0 0 1-8 0L6 52a6 6 0 0 1 0-8Z" fill="#E4A04E"/>
+      <circle cx="80" cy="24" r="8" fill="#FFF8EC"/>`],
+    badge:    ["New badge", `<path d="M50 2 60 20 80 14 78 35 98 40 84 55 98 70 78 75 80 96 60 90 50 108 40 90 20 96 22 75 2 70 16 55 2 40 22 35 20 14 40 20Z" fill="#C4463C"/>
+      <path d="M32 46h36M32 58h26" stroke="#FFF3EC" stroke-width="6"/>`],
+    cutarrow: ["Cut arrow", `<path d="M4 38h52V14l40 36-40 36V62H4Z" fill="#2E4A6B"/>`],
+    burstsay: ["Say burst", `<path d="M50 4 58 22 76 12 74 32 94 30 84 46 100 56 82 62 90 80 70 76 68 96 52 84 38 98 32 78 12 82 18 62 0 54 16 44 6 26 26 28 26 8Z" fill="#F0C04A"/>
+      <path d="M30 44h40M30 58h28" stroke="#3A3020" stroke-width="5"/>`]
+  },
+  cute: {
+    sparkeyes:["Sparkle eyes", `<circle cx="50" cy="52" r="38" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <path d="M34 40c6 6 6 12 0 18M34 40c-6 6-6 12 0 18M66 40c6 6 6 12 0 18M66 40c-6 6-6 12 0 18" fill="#2A2520"/>
+      <path d="M40 70c6 6 14 6 20 0" fill="none" stroke="#2A2520" stroke-width="4"/>`],
+    blush:    ["Blush", `<circle cx="50" cy="52" r="38" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <path d="M34 44c4-5 8-5 12 0M54 44c4-5 8-5 12 0" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <ellipse cx="28" cy="60" rx="9" ry="5" fill="#F2A9BE"/><ellipse cx="72" cy="60" rx="9" ry="5" fill="#F2A9BE"/>
+      <path d="M42 66c4 5 12 5 16 0" fill="none" stroke="#2A2520" stroke-width="4"/>`],
+    cat:      ["Cat", `<path d="M18 34 22 8l20 16M82 34 78 8 58 24" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <circle cx="50" cy="56" r="34" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <path d="M36 50h8M56 50h8" stroke="#2A2520" stroke-width="5"/>
+      <path d="M44 64c3 4 9 4 12 0" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <path d="M14 58h16M70 58h16M14 66h16M70 66h16" stroke="#2A2520" stroke-width="3"/>`],
+    bear:     ["Bear", `<circle cx="22" cy="24" r="12" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <circle cx="78" cy="24" r="12" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <circle cx="50" cy="56" r="34" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <circle cx="38" cy="50" r="4" fill="#2A2520"/><circle cx="62" cy="50" r="4" fill="#2A2520"/>
+      <ellipse cx="50" cy="64" rx="7" ry="5" fill="#2A2520"/>`],
+    bunny:    ["Bunny", `<ellipse cx="34" cy="20" rx="9" ry="20" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <ellipse cx="66" cy="20" rx="9" ry="20" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <circle cx="50" cy="62" r="30" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <circle cx="40" cy="58" r="4" fill="#2A2520"/><circle cx="60" cy="58" r="4" fill="#2A2520"/>
+      <path d="M46 70h8" stroke="#2A2520" stroke-width="4"/>`],
+    wink:     ["Wink", `<circle cx="50" cy="52" r="38" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <circle cx="36" cy="46" r="5" fill="#2A2520"/><path d="M58 46c4-5 10-5 14 0" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <path d="M38 66c6 8 18 8 24 0" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <path d="M82 26l6-10 6 10" fill="none" stroke="#F0C04A" stroke-width="4"/>`],
+    shy:      ["Shy", `<circle cx="50" cy="52" r="38" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <path d="M32 48h14M54 48h14" stroke="#2A2520" stroke-width="4"/>
+      <path d="M42 68c4-4 12-4 16 0" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <path d="M22 58h10M68 58h10" stroke="#F2A9BE" stroke-width="4"/>`],
+    hearteye: ["Heart eyes", `<circle cx="50" cy="52" r="38" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <path d="M36 52c-8-6-10-11-6-14s8 0 6 4c-2-4 2-7 6-4s0 8-6 14Z" fill="#C4463C"/>
+      <path d="M64 52c-8-6-10-11-6-14s8 0 6 4c-2-4 2-7 6-4s0 8-6 14Z" fill="#C4463C"/>
+      <path d="M38 68c6 8 18 8 24 0" fill="none" stroke="#2A2520" stroke-width="4"/>`],
+    shout:    ["Shout", `<circle cx="50" cy="52" r="38" fill="none" stroke="#2A2520" stroke-width="4"/>
+      <path d="M32 40l14 6M68 40l-14 6" stroke="#2A2520" stroke-width="4"/>
+      <ellipse cx="50" cy="68" rx="14" ry="11" fill="#2A2520"/>
+      <path d="M6 30l12 4M94 30l-12 4M50 4v10" stroke="#2A2520" stroke-width="4"/>`]
+  },
+  pretty: {
+    bow:      ["Bow", `<path d="M50 50 16 28c-8-5-14 4-12 14s10 16 18 12Z" fill="#E4849E"/>
+      <path d="M50 50 84 28c8-5 14 4 12 14s-10 16-18 12Z" fill="#E4849E"/>
+      <ellipse cx="50" cy="50" rx="10" ry="9" fill="#C4637E"/>
+      <path d="M44 58 34 88M56 58l10 30" fill="none" stroke="#E4849E" stroke-width="7"/>`],
+    pearls:   ["Pearls", `<g fill="#F2EDE4" stroke="#C9BFA6" stroke-width="2">
+      <circle cx="10" cy="50" r="9"/><circle cx="30" cy="50" r="9"/><circle cx="50" cy="50" r="9"/>
+      <circle cx="70" cy="50" r="9"/><circle cx="90" cy="50" r="9"/></g>`, "repeat"],
+    butterfly:["Butterfly", `<path d="M50 52C32 18 6 24 10 46c3 16 26 18 40 6Z" fill="#C48ABE"/>
+      <path d="M50 52C68 18 94 24 90 46c-3 16-26 18-40 6Z" fill="#C48ABE"/>
+      <path d="M50 52C36 76 18 84 22 92c4 8 22-2 28-14Z" fill="#A96EA4"/>
+      <path d="M50 52c14 24 32 32 28 40-4 8-22-2-28-14Z" fill="#A96EA4"/>
+      <path d="M50 40v46" stroke="#3A2A38" stroke-width="5"/>`],
+    cherry:   ["Cherries", `<circle cx="34" cy="72" r="16" fill="#C4463C"/><circle cx="68" cy="78" r="14" fill="#C4463C"/>
+      <path d="M34 56C40 26 60 14 80 12M68 64C66 38 72 24 80 12" fill="none" stroke="#5E8A4A" stroke-width="5"/>
+      <path d="M80 12c8-4 14 0 16 6-8 4-14 2-16-6Z" fill="#5E8A4A"/>`],
+    posy:     ["Posy", `<g fill="#E4849E"><circle cx="34" cy="34" r="12"/><circle cx="58" cy="26" r="10"/>
+      <circle cx="70" cy="46" r="12"/><circle cx="46" cy="52" r="11"/></g>
+      <g fill="#F0C04A"><circle cx="34" cy="34" r="4.5"/><circle cx="58" cy="26" r="4"/>
+      <circle cx="70" cy="46" r="4.5"/><circle cx="46" cy="52" r="4"/></g>
+      <path d="M40 60 52 94M58 58 56 94M66 58 74 92" fill="none" stroke="#5E8A4A" stroke-width="5"/>`],
+    gem:      ["Gem", `<path d="M28 14h44l22 26-44 50-44-50Z" fill="#8FC4D4"/>
+      <path d="M28 14 50 40 72 14M6 40h88M50 40v50" fill="none" stroke="#FFF" stroke-width="3.5" opacity=".75"/>`],
+    crown:    ["Crown", `<path d="M10 74 4 24l26 20L50 12l20 32 26-20-6 50Z" fill="#E0B44E"/>
+      <path d="M10 78h80" stroke="#C49A34" stroke-width="8"/>
+      <circle cx="30" cy="56" r="5" fill="#C4463C"/><circle cx="50" cy="50" r="5" fill="#5E92C4"/>
+      <circle cx="70" cy="56" r="5" fill="#C4463C"/>`],
+    lipstick: ["Lipstick", `<path d="M38 42h24v48a6 6 0 0 1-6 6H44a6 6 0 0 1-6-6Z" fill="#D4C0A8"/>
+      <path d="M40 8h20v34H40Z" fill="#C4463C"/><path d="M40 8 60 2v6Z" fill="#A82F30"/>`],
+    rosette:  ["Rosette", `<g fill="#C48A9E">${(()=>{let s="";for(let i=0;i<10;i++){const a=i*36;
+      s+=`<ellipse cx="50" cy="26" rx="9" ry="20" transform="rotate(${a} 50 50)"/>`;}return s;})()}</g>
+      <circle cx="50" cy="50" r="12" fill="#8E5A70"/>
+      <path d="M42 62 34 96l16-10 16 10-8-34Z" fill="#C48A9E"/>`]
+  }
+};
+Object.assign(SK, SK_MORE);
+Object.assign(SK_CATS, {collage:"Collage", cute:"Faces", pretty:"Pretty"});
 </script>

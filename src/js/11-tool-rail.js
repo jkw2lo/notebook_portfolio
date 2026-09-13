@@ -103,12 +103,26 @@ function propsHTML(arr){
         <button class="ico" data-act="ital" aria-pressed="${!!b.ital}" title="Italic"><i>I</i></button>`;
     }
     if (b.t === "photo"){
-      s += `<button class="btn ghost" data-act="replace">Replace</button>
-        <div class="seg" data-p="fit">${["cover","contain"].map(v=>
-          `<button data-v="${v}" aria-pressed="${(b.fit||"cover")===v}">${v}</button>`).join("")}</div>
+      s += `<button class="btn ${b.src?"ghost":"pri"}" data-act="replace">
+          ${b.src ? "Replace photo" : "＋ Add my photo"}</button>
+        <button class="btn ghost" data-act="crop" aria-pressed="${CROP===b.id}">✥ Crop</button>
+        <button class="btn ghost" data-act="drawon" aria-pressed="${INKTO===b.id}">✎ Draw on it</button>
+        ${b.pen && b.pen.length ? `<button class="btn ghost" data-act="wipe">Rub out marks</button>` : ""}
+        <span class="sep"></span>
+        <select class="fld" data-p="shape">${Object.keys(SHAPES).map(k =>
+          `<option value="${k}" ${(b.shape||"none")===k?"selected":""}>${SHAPES[k][0]}</option>`).join("")}</select>
+        <select class="fld" data-p="fx">${Object.keys(FX).map(k =>
+          `<option value="${k}" ${(b.fx||"none")===k?"selected":""}>${FX[k][0]}</option>`).join("")}</select>
         <select class="fld" data-p="frame">${["none","mat","polaroid","torn"].map(v=>
           `<option value="${v}" ${b.frame===v?"selected":""}>${v==="none"?"no frame":v}</option>`).join("")}</select>
-        <input class="fld" style="width:126px" data-p="caption" placeholder="Caption" value="${esc(b.caption||"")}">
+        <span class="sep"></span><span class="lbl">Zoom</span>
+        <input type="range" min="100" max="400" data-p="zoomx" value="${Math.round((b.zoom||1)*100)}">
+        <span class="lbl">Edge</span>
+        <input type="range" min="0" max="26" data-p="bw" value="${b.bw||0}">
+        <input type="color" data-p="bc" value="${esc(b.bc||"#2A2520")}" aria-label="Edge colour">
+        <div class="seg" data-p="fit">${["cover","contain"].map(v=>
+          `<button data-v="${v}" aria-pressed="${(b.fit||"cover")===v}">${v}</button>`).join("")}</div>
+        <input class="fld" style="width:120px" data-p="caption" placeholder="Caption" value="${esc(b.caption||"")}">
         <span class="lbl">Round</span><input type="range" min="0" max="60" data-p="radius" value="${b.radius||0}">`;
     }
     if (b.t === "note") s += sw(NOTE_COLORS) +
@@ -148,39 +162,36 @@ function propsHTML(arr){
           style="width:56px" data-p="from" value="${b.from==null?6:b.from}">
         <span class="lbl">to</span><input class="fld" type="number" min="1" max="30"
           style="width:56px" data-p="to" value="${b.to==null?22:b.to}">
-        <input type="color" data-p="color" value="${esc(b.color||"#8A8175")}" aria-label="Rule colour">`;
+        <input type="color" data-p="color" value="${esc(b.color||"#8A8175")}" aria-label="Rule colour"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||10}" title="Text size">`;
     }
     if (b.t === "month"){
       const d = new Date();
       const yy = b.y || d.getFullYear(), mm = (b.m == null ? d.getMonth() : b.m) + 1;
       s += `<input class="fld" type="month" style="width:146px" data-p="ym"
           value="${yy}-${String(mm).padStart(2,"0")}" aria-label="Month and year">
-        <input type="color" data-p="color" value="${esc(b.color||"#2B2720")}" aria-label="Ink">
-        <span class="lbl">click a day on the page to ring it</span>`;
+        <input type="color" data-p="color" value="${esc(b.color||"#2B2720")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||9}" title="Text size"><span class="lbl">click a day on the page to ring it</span>`;
     }
     if (b.t === "track"){
       s += `<input class="fld" style="width:112px" data-p="title" placeholder="Title" value="${esc(b.title||"")}">
         <button class="btn ghost" data-act="trackrows">Edit rows…</button>
         <span class="lbl">Days</span><input class="fld" type="number" min="3" max="31" style="width:56px"
           data-p="cols" value="${b.cols||14}">
-        <input type="color" data-p="color" value="${esc(b.color||"#3F5A46")}" aria-label="Ink">`;
+        <input type="color" data-p="color" value="${esc(b.color||"#3F5A46")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||9}" title="Text size">`;
     }
     if (b.t === "mood"){
       s += `<div class="seg" data-p="kind">${["face","weather"].map(v =>
         `<button data-v="${v}" aria-pressed="${(b.kind||"face")===v}">${v}</button>`).join("")}</div>
-        <input class="fld" style="width:100px" data-p="title" placeholder="Label" value="${esc(b.title||"")}">
-        <span class="lbl">tap one on the page to choose it</span>`;
+        <input class="fld" style="width:100px" data-p="title" placeholder="Label" value="${esc(b.title||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||20}" title="Text size"><span class="lbl">tap one on the page to choose it</span>`;
     }
     if (b.t === "rate"){
       s += `<span class="lbl">Of</span><input class="fld" type="number" min="3" max="10" style="width:56px"
           data-p="n" value="${b.n||5}">
-        <input type="color" data-p="color" value="${esc(b.color||"#C4903C")}" aria-label="Ink">
-        <span class="lbl">tap a star on the page</span>`;
+        <input type="color" data-p="color" value="${esc(b.color||"#C4903C")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||22}" title="Text size"><span class="lbl">tap a star on the page</span>`;
     }
     if (b.t === "quote"){
       s += `<input class="fld" style="width:200px" data-p="text" value="${esc(b.text||"")}">
         <input class="fld" style="width:120px" data-p="by" placeholder="— who said it" value="${esc(b.by||"")}">
-        <input type="color" data-p="color" value="${esc(b.color||"#4A453D")}" aria-label="Ink">`;
+        <input type="color" data-p="color" value="${esc(b.color||"#4A453D")}" aria-label="Ink"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||15}" title="Text size">`;
     }
     if (b.t === "tag"){
       s += `<input class="fld" style="width:150px" data-p="text" placeholder="Written on the tag" value="${esc(b.text||"")}">
@@ -190,10 +201,11 @@ function propsHTML(arr){
     if (b.t === "ticket"){
       s += `<input class="fld" style="width:38px" data-p="stub" value="${esc(b.stub||"")}" aria-label="Stub">
         <input class="fld" style="width:150px" data-p="t1" placeholder="Where from" value="${esc(b.t1||"")}">
-        <input class="fld" style="width:150px" data-p="t2" placeholder="What it was" value="${esc(b.t2||"")}">`;
+        <input class="fld" style="width:150px" data-p="t2" placeholder="What it was" value="${esc(b.t2||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||14}" title="Text size">`;
     }
     if (b.t === "stamp"){
-      s += `<button class="btn ghost" data-act="replace">Photo</button>
+      s += `<button class="btn ${b.src?"ghost":"pri"}" data-act="replace">
+          ${b.src ? "Replace photo" : "＋ Add my photo"}</button><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||12}" title="Text size">
         <input type="color" data-p="color" value="${esc(b.color||"#8FA9B8")}" aria-label="Stamp colour">
         <input class="fld" style="width:44px" data-p="val" placeholder="5" value="${esc(b.val||"")}">
         <input class="fld" style="width:120px" data-p="cap" placeholder="Caption" value="${esc(b.cap||"")}">`;
@@ -220,13 +232,14 @@ function propsHTML(arr){
       <input class="fld" style="width:74px" data-p="text" placeholder="JL" value="${esc(b.text||"")}">
       <input class="fld" type="number" min="8" max="48" style="width:58px" data-p="size" value="${b.size||18}">`;
     if (b.t === "env") s += sw(SCRAP_COLORS) +
-      `<input class="fld" style="width:140px" data-p="text" placeholder="Written on it" value="${esc(b.text||"")}">`;
+      `<input class="fld" style="width:140px" data-p="text" placeholder="Written on it" value="${esc(b.text||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||12}" title="Text size">`;
     if (b.t === "lace") s += sw(["#FBF7EE","#F4E8E4","#EDF0F4","#F2EEE2","#E8DCC4"]);
     if (b.t === "clip") s += sw(["#8A9098","#C4A04E","#C4463C","#3F5A6B","#2A2520"]);
     if (b.t === "libcard") s += `<input class="fld" style="width:140px" data-p="title" value="${esc(b.title||"")}">
       <span class="lbl">Lines</span><input class="fld" type="number" min="2" max="14" style="width:56px"
-        data-p="lines" value="${b.lines||6}">`;
-    if (b.t === "post") s += `<button class="btn ghost" data-act="replace">Photo</button>`;
+        data-p="lines" value="${b.lines||6}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||9}" title="Text size">`;
+    if (b.t === "post") s += `<button class="btn ${b.src?"ghost":"pri"}" data-act="replace">
+      ${b.src ? "Replace photo" : "＋ Add my photo"}</button>`;
     if (b.t === "check"){
       s += `<button class="btn ghost" data-act="editlist">Edit items…</button>
         <input class="fld" type="number" min="10" max="40" style="width:58px" data-p="size" value="${b.size||16}">
@@ -235,11 +248,11 @@ function propsHTML(arr){
     if (b.t === "swatch"){
       s += `<input type="color" data-p="color" value="${esc(b.color||"#8A6034")}" aria-label="Swatch colour">
         <input class="fld" style="width:112px" data-p="label" placeholder="Material" value="${esc(b.label||"")}">
-        <input class="fld" style="width:134px" data-p="spec" placeholder="3.2 mm · natural" value="${esc(b.spec||"")}">`;
+        <input class="fld" style="width:134px" data-p="spec" placeholder="3.2 mm · natural" value="${esc(b.spec||"")}"><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||12}" title="Text size">`;
     }
     if (b.t === "spec"){
       s += `<input class="fld" style="width:120px" data-p="title" placeholder="Title" value="${esc(b.title||"")}">
-        <button class="btn ghost" data-act="specedit">Edit rows…</button>`;
+        <button class="btn ghost" data-act="specedit">Edit rows…</button><input class="fld" type="number" min="6" max="120" style="width:58px" data-p="size" value="${b.size||10.5}" title="Text size">`;
     }
     if (b.t === "stitch"){
       s += `<input type="color" data-p="color" value="${esc(b.color||"#8A6034")}" aria-label="Thread colour">
@@ -315,9 +328,18 @@ function wireTools(arr){
   const live = e => {
     const p = e.target.dataset.p; if (!p) return;
     const v = (e.target.type === "number" || e.target.type === "range") ? +e.target.value : e.target.value;
+    const old = p === "size" ? (arr[0] && (arr[0].size || DEF_SIZE[arr[0].t])) : null;
     arr.forEach(b => {
       b[p] = v;
       if (p === "preset" || p === "size" || p === "font" || p === "caps" || p === "role") b.h = 0;
+      /* a piece whose box hugs its words grows with them — otherwise the
+         frame stays put and the letters climb out of it */
+      if (p === "size" && old && old > 4 && (HUGS.has(b.t) || HUGS_H.has(b.t))){
+        const k = v / old;
+        if (HUGS.has(b.t)) b.w = Math.max(20, Math.round(b.w * k));
+        b.h = Math.max(16, Math.round((b.h || 30) * k));
+      }
+      if (p === "zoomx"){ b.zoom = v/100; delete b.zoomx; }
       if (p === "role"){ delete b.track; delete b.caps; delete b.ital; delete b.font;
         delete b.weight; delete b.color; delete b.size; }
       if (p === "trackx"){ b.track = v/100; delete b.trackx; b.h = 0; }
@@ -331,7 +353,7 @@ function wireTools(arr){
       if (p === "kind" && b.t === "shape") b.h = b.kind === "rule" ? 0 : (b.h || 120);
     });
     dirty(); drawBlocks(); drawSel();
-    if (["kind","frame","fill","fmt","style","role"].includes(p)) drawTools();
+    if (["kind","frame","fill","fmt","style","role","shape","fx"].includes(p)) drawTools();
   };
   t.oninput = e => { if (e.target.tagName !== "SELECT") live(e); };
   t.onchange = e => {
@@ -377,6 +399,9 @@ function doAct(a, arr){
   else if (a === "die"){ snap(); arr.forEach(b => b.die = b.die === false); }
   else if (a === "pickSticker"){ stickerSwap(arr[0]); return; }
   else if (a === "trackrows") return trackRows(arr[0]);
+  else if (a === "crop"){ setCrop(CROP === arr[0].id ? null : arr[0].id); return; }
+  else if (a === "drawon"){ setInkTo(INKTO === arr[0].id ? null : arr[0].id); return; }
+  else if (a === "wipe"){ snap(); arr.forEach(b => delete b.pen); }
   else if (a === "replace"){ PICK_FOR = arr[0].id; $("#picker").click(); return; }
   else if (a === "specedit") return specEditor(arr[0]);
   else if (a === "editlist") return listEditor(arr[0]);

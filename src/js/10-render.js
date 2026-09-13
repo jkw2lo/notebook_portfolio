@@ -41,14 +41,7 @@ function inkPath(b){
 
 function blockHTML(b){
   switch (b.t){
-    case "photo": {
-      const inner = b.src ? `<img src="${esc(b.src)}" alt="${esc(b.caption||"")}" draggable="false">`
-                          : `<div class="ph">drop a photo</div>`;
-      const cap = b.frame === "polaroid" ? `<div class="pcap">${esc(b.caption||"")}</div>` : "";
-      const clip = b.frame === "torn" ? `clip-path:${torn(b.id, 2.6)};` : "";
-      return `<div class="b-photo fit-${esc(b.fit||"cover")} fr-${esc(b.frame||"none")}"
-        style="position:absolute;inset:0;border-radius:${b.radius||0}px;${clip}">${inner}${cap}</div>`;
-    }
+    case "photo": return photoHTML(b);
     case "text":
       return `<div class="b-text" style="position:absolute;inset:0;${textStyle(b)}
         text-align:${esc(b.align||"left")}">${esc(b.text||"")}</div>`;
@@ -56,12 +49,12 @@ function blockHTML(b){
       return `<div class="b-note" style="position:absolute;inset:0;background:${esc(b.color||NOTE_COLORS[0])};
         font-size:${b.size||16}px">${esc(b.text||"")}</div>`;
     case "swatch":
-      return `<div class="b-swatch" style="position:absolute;inset:0">
+      return `<div class="b-swatch" style="position:absolute;inset:0;font-size:${b.size||12}px">
         <div class="chip" style="background:${esc(b.color||"#8A6034")}"></div>
         <div class="meta"><div class="nm">${esc(b.label||"Material")}</div>
         <div class="sp">${esc(b.spec||"")}</div></div></div>`;
     case "spec":
-      return `<div class="b-spec" style="position:absolute;inset:0">
+      return `<div class="b-spec" style="position:absolute;inset:0;font-size:${b.size||10.5}px">
         ${b.title ? `<h4>${esc(b.title)}</h4>` : ""}
         <table><tbody>${(b.rows||[]).map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("")}</tbody></table></div>`;
     case "shape": {
@@ -92,11 +85,11 @@ function blockHTML(b){
         <span class="eyelet"></span>
         <div class="txt" style="font-size:${b.size||15}px">${esc(b.text||"")}</div></div>`;
     case "ticket":
-      return `<div class="b-ticket"><div class="stub">${esc(b.stub||"01")}</div>
+      return `<div class="b-ticket" style="font-size:${b.size||14}px"><div class="stub">${esc(b.stub||"01")}</div>
         <div class="body"><div class="t1">${esc(b.t1||"")}</div>
         <div class="t2">${esc(b.t2||"")}</div></div></div>`;
     case "stamp":
-      return `<div class="b-stamp"><div class="in" style="background:${esc(b.color||"#8FA9B8")}">
+      return `<div class="b-stamp" style="font-size:${b.size||12}px"><div class="in" style="background:${esc(b.color||"#8FA9B8")}">
         ${b.src ? `<img src="${esc(b.src)}" alt="" draggable="false">` : ""}
         <span class="val">${esc(b.val||"")}</span>
         <span class="cap">${esc(b.cap||"")}</span></div></div>`;
@@ -138,7 +131,13 @@ function blockHTML(b){
   return "";
 }
 
-const AUTO_H = b => b.t === "text" || b.t === "stitch" || (b.t === "shape" && b.kind === "rule");
+/* a frame drawn round words has to grow when the words do — but a band
+   that spans the page keeps its width and only gets taller */
+const HUGS = new Set(["mark","date","seal","tag","swatch","ticket","stamp","libcard","env"]);
+const HUGS_H = new Set(["quote","spec","check","track","month","mood","rate","time"]);
+const DEF_SIZE = {mark:20, date:19, seal:18, tag:15, swatch:12, ticket:14, stamp:12,
+  libcard:9, env:12, quote:15, spec:10.5, check:16, track:9, month:9, mood:20, rate:22, time:10};
+const AUTO_H = b = b.t === "text" || b.t === "stitch" || (b.t === "shape" && b.kind === "rule");
 /* things whose own controls sit on the page and must take a click */
 const LIVE_BITS = "[data-ck],[data-day],[data-cell],[data-pick],[data-star]";
 const OPEN_SHAPES = ["solid","dashed","dotted","double"];

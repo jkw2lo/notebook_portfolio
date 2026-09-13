@@ -15,7 +15,7 @@ async function setPhoto(b, file){
     const {blob,w,h} = await shrink(file);
     if (b.src && b.src.startsWith("blob:")) URL.revokeObjectURL(b.src);
     snap(); b.src = URL.createObjectURL(blob); b.natW = w; b.natH = h;
-    BLOBS.set(b.id, blob); idbPut(b.id, blob); dirty(); drawBlocks(); drawSide();
+    BLOBS.set(b.id, blob); idbPut(b.id, blob); dirty(); drawBlocks(); drawSide(); drawTools();
   } catch(_){ toast("That file could not be read as an image."); }
 }
 async function dropFiles(files, at){

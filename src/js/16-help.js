@@ -19,10 +19,7 @@ $("#b-help").onclick = e => {
     <button><span class="gicon">🔒</span>Lock / unlock the selection<span class="k">⌘L</span></button>
     <button><span class="gicon">▦</span>Show / hide the stencil<span class="k">G</span></button>
     <button><span class="gicon">⊢</span>Rulers down the edges<span class="k">R</span></button>
-    <hr><button data-x="export"><span class="gicon">↓</span>Export notebook JSON</button>
-    <button data-x="import"><span class="gicon">↑</span>Import a notebook…</button>
-    <button data-x="pdf"><span class="gicon">⎙</span>Print / save as PDF</button>
-    <button data-x="stand"><span class="gicon">⇪</span>Export a standalone copy…</button>`,
+    <hr><div class="gl">Getting things in and out lives under Export in the top bar.</div>`,
     ev => {
       if (ev.target.closest('[data-x="export"]')){ closePop(); exportJSON(); }
       if (ev.target.closest('[data-x="import"]')){ closePop(); importJSON(); }

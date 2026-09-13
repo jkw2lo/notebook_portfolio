@@ -199,7 +199,7 @@ function sealHTML(b){
 }
 function envHTML(b){
   const c = esc(b.color || "#E8DCC4");
-  return `<div class="b-env" style="position:absolute;inset:0;background:${c}">
+  return `<div class="b-env" style="position:absolute;inset:0;font-size:${b.size||12}px;background:${c}">
     <div class="flap" style="border-top-color:${c}"></div>
     <div class="lbl" style="font-family:${faceCSS(b.font||"type")}">${esc(b.text||"")}</div></div>`;
 }
@@ -208,7 +208,7 @@ function laceHTML(b){
   return `<div class="b-lace" style="position:absolute;inset:0;background:${c}"></div>`;
 }
 function cardHTML(b){
-  return `<div class="b-card" style="position:absolute;inset:0">
+  return `<div class="b-card" style="position:absolute;inset:0;font-size:${b.size||9}px">
     <div class="hd" style="font-family:${faceCSS("mono")}">${esc(b.title||"")}</div>
     <div class="rows">${Array.from({length:b.lines||6},()=>`<i></i>`).join("")}</div></div>`;
 }

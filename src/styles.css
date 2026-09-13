@@ -146,6 +146,12 @@ input[type=color]{width:26px; height:26px; padding:0; border:1px solid var(--lin
 
 /* ── block bodies ──────────────────────────────────────────── */
 .b-photo{overflow:hidden; background:#D9D4CA}
+.b-photo .pwrap{position:relative; width:100%; height:100%; overflow:hidden}
+.b-photo .pwrap img{width:100%; height:100%; display:block; transform-origin:center}
+.b-photo .pink{position:absolute; inset:0; width:100%; height:100%; overflow:visible;
+  pointer-events:none}
+#canvas.cropping .blk .hit{cursor:move}
+.blk.crop .pwrap{outline:2px dashed var(--accent); outline-offset:-2px}
 .b-photo img{width:100%; height:100%; display:block}
 .b-photo.fit-cover img{object-fit:cover}
 .b-photo.fit-contain img{object-fit:contain}
@@ -176,18 +182,20 @@ input[type=color]{width:26px; height:26px; padding:0; border:1px solid var(--lin
 .b-swatch{display:flex; flex-direction:column; background:#fff; box-shadow:var(--shadow-2); overflow:hidden}
 .b-swatch .chip{flex:1; min-height:0}
 .b-swatch .meta{padding:8px 10px; border-top:1px solid rgba(0,0,0,.09)}
-.b-swatch .nm{font-family:var(--f-ui); font-weight:700; font-size:12px; color:#171512;
+.b-swatch{font-size:12px}
+.b-swatch .nm{font-family:var(--f-ui); font-weight:700; font-size:1em; color:#171512;
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.b-swatch .sp{font-family:var(--f-mono); font-size:9.5px; color:#6B655B; letter-spacing:.06em;
+.b-swatch .sp{font-family:var(--f-mono); font-size:.8em; color:#6B655B; letter-spacing:.06em;
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 
 .b-spec{background:#fff; box-shadow:var(--shadow-2); padding:13px 15px; overflow:hidden}
-.b-spec h4{margin:0 0 9px; font-family:var(--f-disp); font-size:15px; font-weight:600;
+.b-spec{font-size:10.5px}
+.b-spec h4{margin:0 0 .85em; font-family:var(--f-disp); font-size:1.42em; font-weight:600;
   color:#171512; border-bottom:1px solid #171512; padding-bottom:7px}
-.b-spec table{width:100%; border-collapse:collapse; font-family:var(--f-mono); font-size:10.5px}
+.b-spec table{width:100%; border-collapse:collapse; font-family:var(--f-mono); font-size:1em}
 .b-spec td{padding:5px 0; border-bottom:1px solid #E7E2D8; color:#171512; vertical-align:top}
 .b-spec td:first-child{color:#7C766B; letter-spacing:.08em; text-transform:uppercase;
-  font-size:9px; padding-right:14px; white-space:nowrap; padding-top:6px}
+  font-size:.86em; padding-right:14px; white-space:nowrap; padding-top:6px}
 .b-spec td:last-child{text-align:right; font-variant-numeric:tabular-nums}
 
 .b-shape{width:100%; height:100%}
@@ -214,13 +222,14 @@ input[type=color]{width:26px; height:26px; padding:0; border:1px solid var(--lin
         radial-gradient(circle 7px at 100% 50%, transparent 98%, #000);
   -webkit-mask-composite:source-in; mask:radial-gradient(circle 7px at 0 50%, transparent 98%, #000),
         radial-gradient(circle 7px at 100% 50%, transparent 98%, #000); mask-composite:intersect}
+.b-ticket{font-size:14px}
 .b-ticket .stub{width:31%; border-right:2px dashed rgba(0,0,0,.3); display:grid; place-items:center;
-  font-family:var(--f-type); font-size:19px; color:#5A4A28; flex:none}
+  font-family:var(--f-type); font-size:1.36em; color:#5A4A28; flex:none}
 .b-ticket .body{flex:1; padding:8px 11px; display:flex; flex-direction:column; justify-content:center;
   gap:3px; min-width:0}
-.b-ticket .t1{font-family:var(--f-type); font-size:14px; color:#3B3220; overflow:hidden;
+.b-ticket .t1{font-family:var(--f-type); font-size:1em; color:#3B3220; overflow:hidden;
   text-overflow:ellipsis; white-space:nowrap}
-.b-ticket .t2{font-family:var(--f-mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase;
+.b-ticket .t2{font-family:var(--f-mono); font-size:.64em; letter-spacing:.14em; text-transform:uppercase;
   color:#8A7850; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 
 .b-stamp{position:absolute; inset:0; padding:7px; background:#fff;
@@ -236,19 +245,20 @@ input[type=color]{width:26px; height:26px; padding:0; border:1px solid var(--lin
   filter:drop-shadow(0 2px 3px rgba(0,0,0,.22))}
 .b-stamp .in{width:100%; height:100%; display:grid; place-items:center; overflow:hidden; position:relative}
 .b-stamp .in img{width:100%; height:100%; object-fit:cover}
-.b-stamp .val{position:absolute; left:6px; top:5px; font-family:var(--f-type); font-size:12px;
+.b-stamp{font-size:12px}
+.b-stamp .val{position:absolute; left:6px; top:5px; font-family:var(--f-type); font-size:1em;
   color:#FFF; text-shadow:0 1px 2px rgba(0,0,0,.7)}
 .b-stamp .cap{position:absolute; left:0; right:0; bottom:4px; text-align:center;
-  font-family:var(--f-mono); font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:#FFF;
+  font-family:var(--f-mono); font-size:.67em; letter-spacing:.12em; text-transform:uppercase; color:#FFF;
   text-shadow:0 1px 2px rgba(0,0,0,.75)}
 
 .b-ribbon{position:absolute; inset:0; box-shadow:0 2px 5px rgba(0,0,0,.2)}
 .b-ribbon::after{content:""; position:absolute; inset:0;
   background:linear-gradient(180deg, rgba(255,255,255,.42), transparent 42%, rgba(0,0,0,.14))}
 
-.b-date{position:absolute; inset:0; display:grid; place-items:center; padding:6px 10px;
+.b-date{position:absolute; inset:0; display:grid; place-items:center; padding:.3em .5em;
   font-family:var(--f-type); text-align:center; line-height:1.15; opacity:.82;
-  border:2.5px solid currentColor; border-radius:4px}
+  border:.14em solid currentColor; border-radius:.2em}
 .b-date .d{font-size:inherit; letter-spacing:.05em}
 .b-date .w{font-family:var(--f-mono); font-size:.44em; letter-spacing:.2em; text-transform:uppercase;
   opacity:.8; margin-top:3px}
@@ -355,8 +365,8 @@ body.present #ptitle{display:block}
 
 .b-month{font-family:var(--f-mono); padding:8px 9px; display:flex; flex-direction:column; gap:5px;
   z-index:2; pointer-events:none}
-.b-month .mh{font-family:var(--f-disp); font-size:14px; font-weight:600; text-align:center}
-.b-month .mg{display:grid; grid-template-columns:repeat(7,1fr); gap:2px; flex:1; font-size:9px}
+.b-month .mh{font-family:var(--f-disp); font-size:1.55em; font-weight:600; text-align:center}
+.b-month .mg{display:grid; grid-template-columns:repeat(7,1fr); gap:2px; flex:1; font-size:1em}
 .b-month .mg i{display:grid; place-items:center; border-radius:50%; aspect-ratio:1; font-style:normal}
 .b-month .mg i.w{opacity:.45; font-size:8px}
 .b-month .mg i.d{pointer-events:auto; cursor:pointer}
@@ -365,8 +375,8 @@ body.present #ptitle{display:block}
 
 .b-track{font-family:var(--f-mono); padding:9px 10px; display:flex; flex-direction:column; gap:4px;
   z-index:2; pointer-events:none}
-.b-track .th{font-family:var(--f-hand); font-size:14px; margin-bottom:2px}
-.b-track .tl{display:flex; align-items:center; gap:7px; font-size:9px}
+.b-track .th{font-family:var(--f-hand); font-size:1.55em; margin-bottom:2px}
+.b-track .tl{display:flex; align-items:center; gap:7px; font-size:1em}
 .b-track .tl .nm{width:64px; flex:none; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
   letter-spacing:.06em; text-transform:uppercase; opacity:.75}
 .b-track .cells{display:flex; gap:2.5px; flex:1}
@@ -378,27 +388,27 @@ body.present #ptitle{display:block}
   z-index:2; pointer-events:none}
 .b-mood .ml{font-family:var(--f-mono); font-size:9px; letter-spacing:.13em; text-transform:uppercase;
   opacity:.6; margin-right:4px}
-.b-mood i{font-style:normal; font-size:20px; opacity:.38; pointer-events:auto; cursor:pointer;
+.b-mood i{font-style:normal; font-size:1em; opacity:.38; pointer-events:auto; cursor:pointer;
   line-height:1; padding:2px}
 .b-mood i.on{opacity:1; transform:scale(1.22)}
 
 .b-rate{display:flex; align-items:center; justify-content:center; gap:3px;
   z-index:2; pointer-events:none}
-.b-rate i{font-style:normal; font-size:22px; opacity:.26; pointer-events:auto; cursor:pointer; line-height:1}
+.b-rate i{font-style:normal; font-size:1em; opacity:.26; pointer-events:auto; cursor:pointer; line-height:1}
 .b-rate i.on{opacity:1}
 
 .b-quote{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
   padding:10px 16px; text-align:center; border-top:1px solid currentColor;
   border-bottom:1px solid currentColor}
-.b-quote .q{font-family:var(--f-disp); font-style:italic; font-size:15px; line-height:1.45}
-.b-quote .by{font-family:var(--f-mono); font-size:8.5px; letter-spacing:.16em; text-transform:uppercase; opacity:.65}
+.b-quote .q{font-family:var(--f-disp); font-style:italic; font-size:1em; line-height:1.45}
+.b-quote .by{font-family:var(--f-mono); font-size:.58em; letter-spacing:.16em; text-transform:uppercase; opacity:.65}
 
 .b-mark{display:grid; place-items:center; text-align:center; opacity:.8; font-family:var(--f-type);
   letter-spacing:.08em; line-height:1.05}
 .b-mark .t{padding:0 .3em}
-.b-mark.box{border:3px solid currentColor; border-radius:3px; box-shadow:inset 0 0 0 2px transparent,
-  inset 0 0 0 4.5px currentColor}
-.b-mark.rnd{border:3px solid currentColor; border-radius:50%; box-shadow:inset 0 0 0 4.5px currentColor}
+.b-mark.box{border:.16em solid currentColor; border-radius:.16em;
+  box-shadow:inset 0 0 0 .1em transparent, inset 0 0 0 .24em currentColor}
+.b-mark.rnd{border:.16em solid currentColor; border-radius:50%; box-shadow:inset 0 0 0 .24em currentColor}
 .b-mark.rnd .sub{display:block; font-family:var(--f-mono); font-size:.42em; letter-spacing:.22em; opacity:.85}
 .b-mark.ban{background:currentColor; clip-path:polygon(0 0,100% 0,100% 100%,0 100%,7% 50%)}
 .b-mark.ban .t{color:#FFF8F0; mix-blend-mode:normal}
@@ -549,8 +559,9 @@ body.objs-open #objs{display:flex}
   border-left:solid transparent; border-right:solid transparent; border-top-style:solid;
   border-left-width:50%; border-right-width:50%; border-top-width:52%;
   filter:brightness(.93)}
+.b-env{font-size:12px}
 .b-env .lbl{position:absolute; left:10%; right:10%; bottom:12%; text-align:center;
-  font-size:12px; color:#4A4034; letter-spacing:.1em; text-transform:uppercase}
+  font-size:1em; color:#4A4034; letter-spacing:.1em; text-transform:uppercase}
 .b-lace{box-shadow:0 1px 3px rgba(0,0,0,.14);
   -webkit-mask:radial-gradient(circle 9px at 10px 100%, transparent 96%, #000) 0 0/20px 100% repeat-x,
     linear-gradient(#000,#000) 0 0/100% calc(100% - 9px) no-repeat;
@@ -560,7 +571,8 @@ body.objs-open #objs{display:flex}
   background:radial-gradient(circle 3px at 10px 10px, rgba(0,0,0,.09) 96%, transparent 0) 0 0/20px 20px}
 .b-card{background:#F6F1E2; box-shadow:var(--shadow-2); padding:10px 12px; overflow:hidden;
   border-top:14px solid #C9563F}
-.b-card .hd{font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:#8A7850;
+.b-card{font-size:9px}
+.b-card .hd{font-size:1em; letter-spacing:.18em; text-transform:uppercase; color:#8A7850;
   border-bottom:1px solid #C9BFA6; padding-bottom:5px; margin-bottom:7px}
 .b-card .rows{display:flex; flex-direction:column; gap:11px}
 .b-card .rows i{display:block; height:1px; background:#C9BFA6}
@@ -576,8 +588,8 @@ body.objs-open #objs{display:flex}
 .b-post .lines i{display:block; height:1px; background:#D4C9AE}
 
 .b-date.plain{border:0}
-.b-date.round{border:3px solid currentColor; border-radius:50%;
-  box-shadow:inset 0 0 0 4.5px currentColor}
+.b-date.round{border:.16em solid currentColor; border-radius:50%;
+  box-shadow:inset 0 0 0 .24em currentColor}
 .b-date.banner{background:currentColor; clip-path:polygon(0 0,100% 0,100% 100%,0 100%,7% 50%)}
 .b-date.banner .d,.b-date.banner .w{color:#FFF8F0}
 .b-date.burst{background:currentColor; clip-path:polygon(50% 0,60% 14%,74% 5%,77% 21%,93% 19%,

@@ -114,5 +114,6 @@ $("#b-objs").onclick = () => {
   drawObjs(); fitPage(true);
 };
 $("#objs-x").onclick = () => $("#b-objs").click();
+$("#b-share").onclick = e => shareMenu(e.currentTarget);
 wireObjs();
 

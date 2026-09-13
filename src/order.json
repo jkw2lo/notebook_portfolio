@@ -17,5 +17,6 @@
   "16-help.js",
   "17-save.js",
   "18-boot.js",
-  "19-local-and-templates.js"
+  "19-local-and-templates.js",
+  "20-photo-and-share.js"
 ]

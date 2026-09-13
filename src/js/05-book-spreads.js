@@ -111,6 +111,7 @@ function drawBlocks(){
       el.style.cssText = `left:${b.x}px;top:${b.y}px;width:${b.w}px;` +
         (auto && !b.h ? "" : `height:${b.h}px;`) + `transform:rotate(${b.rot||0}deg)`;
       if (isLocked(b)) el.classList.add("lk");
+      if (b.id === CROP) el.classList.add("crop");
       el.innerHTML = blockHTML(b) + `<div class="hit"></div>`;
       if (b.x + b.w < -4 || b.y + (b.h||30) < -4 || b.x > pw+4 || b.y > ph+4) el.classList.add("off");
       host.appendChild(el);

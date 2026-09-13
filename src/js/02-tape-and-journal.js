@@ -65,7 +65,7 @@ function timeHTML(b){
       <span class="hn">${String(hr % 24).padStart(2,"0")}</span><i></i></div>`);
     if (i < n) rows.push(`<div class="tr half" style="top:${((i+.5)/n*100).toFixed(3)}%"><i></i></div>`);
   }
-  return `<div class="b-time" style="position:absolute;inset:0;color:${esc(b.color||"#8A8175")}">${rows.join("")}</div>`;
+  return `<div class="b-time" style="position:absolute;inset:0;font-size:${b.size||10}px;color:${esc(b.color||"#8A8175")}">${rows.join("")}</div>`;
 }
 function monthHTML(b){
   const d = new Date(), y = b.y || d.getFullYear(), m = b.m == null ? d.getMonth() : b.m;
@@ -76,14 +76,14 @@ function monthHTML(b){
   for (let i = 0; i < lead; i++) cells.push(`<i></i>`);
   for (let dd = 1; dd <= days; dd++)
     cells.push(`<i class="d ${on.has(dd)?"on":""}" data-day="${dd}">${dd}</i>`);
-  return `<div class="b-month" style="position:absolute;inset:0;color:${esc(b.color||"#2B2720")}">
+  return `<div class="b-month" style="position:absolute;inset:0;font-size:${b.size||9}px;color:${esc(b.color||"#2B2720")}">
     <div class="mh">${first.toLocaleDateString(undefined,{month:"long",year:"numeric"})}</div>
     <div class="mg">${["M","T","W","T","F","S","S"].map(w=>`<i class="w">${w}</i>`).join("")}${cells.join("")}</div></div>`;
 }
 function trackHTML(b){
   const rows = b.rows || ["Habit"], cols = b.cols || 14, on = b.on || [];
   const set = new Set(on.map(p => p[0] + ":" + p[1]));
-  return `<div class="b-track" style="position:absolute;inset:0;color:${esc(b.color||"#2B2720")}">
+  return `<div class="b-track" style="position:absolute;inset:0;font-size:${b.size||9}px;color:${esc(b.color||"#2B2720")}">
     ${b.title ? `<div class="th">${esc(b.title)}</div>` : ""}
     ${rows.map((r,ri) => `<div class="tl"><span class="nm">${esc(r)}</span>
       <span class="cells">${Array.from({length:cols},(_,ci) =>
@@ -91,17 +91,17 @@ function trackHTML(b){
 }
 function moodHTML(b){
   const set = b.kind === "weather" ? WX : MOODS;
-  return `<div class="b-mood" style="position:absolute;inset:0;color:${esc(b.color||"#2B2720")}">
+  return `<div class="b-mood" style="position:absolute;inset:0;font-size:${b.size||20}px;color:${esc(b.color||"#2B2720")}">
     ${b.title ? `<span class="ml">${esc(b.title)}</span>` : ""}
     ${set.map((g,i) => `<i class="${b.pick===i?"on":""}" data-pick="${i}">${g}</i>`).join("")}</div>`;
 }
 function rateHTML(b){
   const n = b.n || 5;
-  return `<div class="b-rate" style="position:absolute;inset:0;color:${esc(b.color||"#C4903C")}">
+  return `<div class="b-rate" style="position:absolute;inset:0;font-size:${b.size||22}px;color:${esc(b.color||"#C4903C")}">
     ${Array.from({length:n},(_,i) => `<i class="${i < (b.v||0) ? "on":""}" data-star="${i}">★</i>`).join("")}</div>`;
 }
 function quoteHTML(b){
-  return `<div class="b-quote" style="position:absolute;inset:0;color:${esc(b.color||"#4A453D")}">
+  return `<div class="b-quote" style="position:absolute;inset:0;font-size:${b.size||15}px;color:${esc(b.color||"#4A453D")}">
     <span class="q">${esc(b.text||"")}</span>
     ${b.by ? `<span class="by">${esc(b.by)}</span>` : ""}</div>`;
 }

@@ -11,6 +11,17 @@ $("#canvas").addEventListener("pointerdown", e => {
 
   if (SPACE || e.button === 1){ MODE = "pan"; ORIG = {...W}; cv.classList.add("pan"); return; }
 
+  /* cropping: the frame stays, the picture moves inside it */
+  if (CROP){
+    const host = e.target.closest(".blk");
+    if (host && host.dataset.id === CROP){
+      const b = byId(CROP);
+      MODE = "crop"; ORIG = {b, px: b.px == null ? 50 : b.px, py: b.py == null ? 50 : b.py};
+      snap(); return;
+    }
+    setCrop(null);
+  }
+
   if (TOOL !== "select" && !RO){
     MODE = "ink"; STROKE = [[START.w.x, START.w.y]];
     $("#wet").innerHTML = `<path id="wetp" fill="none" stroke="${PEN.color}" stroke-width="${PEN.width}"
@@ -70,6 +81,17 @@ $("#canvas").addEventListener("pointermove", e => {
   const dx = e.clientX - START.sx, dy = e.clientY - START.sy;
 
   if (MODE === "pan"){ W.x = ORIG.x + dx; W.y = ORIG.y + dy; camApply(); return; }
+
+  if (MODE === "crop"){
+    const b = ORIG.b, z = Math.max(1, b.zoom || 1);
+    /* at 1× there is nothing to move; the further in, the more there is */
+    const span = 100 / Math.max(.001, z - 1 + .35);
+    b.px = clamp(ORIG.px - (dx / W.z / b.w) * span, 0, 100);
+    b.py = clamp(ORIG.py - (dy / W.z / (b.h||30)) * span, 0, 100);
+    const img = $(`.blk[data-id="${b.id}"] .pwrap img`);
+    if (img) img.style.objectPosition = `${b.px}% ${b.py}%`;
+    return;
+  }
 
   if (MODE === "ink"){
     const p = toWorld(e.clientX, e.clientY), last = STROKE[STROKE.length-1];
@@ -161,10 +183,19 @@ $("#canvas").addEventListener("pointerup", () => {
         vw: Math.round(w), vh: Math.round(h),
         color: PEN.color, width: PEN.width, kind: PEN.kind
       });
-      snap(); putBlocks([b], {x:x0, y:y0}); dirty(); drawBlocks(); drawSide();
+      const host = INKTO && byId(INKTO);
+      if (host){                       /* the marks travel with the picture */
+        const pts = STROKE.map(p => { const l = toLocal(host, p[0], p[1]); return [l.x, l.y]; });
+        snap();
+        (host.pen = host.pen || []).push({pts, color:PEN.color, width:PEN.width, kind:PEN.kind});
+        dirty(); drawBlocks();
+      } else {
+        snap(); putBlocks([b], {x:x0, y:y0}); dirty(); drawBlocks(); drawSide();
+      }
     }
     STROKE = null; MODE = null; return;
   }
+  if (MODE === "crop"){ dirty(); MODE = null; ORIG = null; return; }
   if (MODE === "move"){ rehomeBlocks(selArr()); }
   if (MODE === "move" || MODE === "size" || MODE === "rot"){ dirty(); drawBlocks(); drawSel(); drawSide(); }
   if (MODE === "marquee") drawTools();
@@ -192,6 +223,11 @@ $("#canvas").addEventListener("dblclick", e => {
 
 $("#canvas").addEventListener("wheel", e => {
   e.preventDefault();
+  if (CROP){
+    const b = byId(CROP);
+    if (b){ b.zoom = clamp((b.zoom || 1) * Math.exp(-e.deltaY * 0.0016), 1, 4);
+      dirty(); drawBlocks(); drawTools(); return; }
+  }
   const r = $("#canvas").getBoundingClientRect();
   const mx = e.clientX-r.left, my = e.clientY-r.top;
   if (e.ctrlKey || e.metaKey){                     /* a trackpad pinch arrives with ctrlKey */
@@ -252,7 +288,10 @@ addEventListener("keydown", e => {
     SEL = new Set(viewBlocks().filter(b => !isLocked(b)).map(b=>b.id)); drawSel(); drawTools(); return; }
   if (mod && e.key.toLowerCase() === "l"){ e.preventDefault(); if (SEL.size) toggleLock(selArr()); return; }
   if (mod) return;
-  if (e.key === "Escape"){ if (TOOL !== "select") setTool("select"); else { SEL.clear(); drawSel(); drawTools(); } return; }
+  if (e.key === "Escape"){
+    if (CROP) return setCrop(null);
+    if (INKTO) return setInkTo(null);
+    if (TOOL !== "select") setTool("select"); else { SEL.clear(); drawSel(); drawTools(); } return; }
   if ((e.key === "Backspace" || e.key === "Delete") && SEL.size){ e.preventDefault(); doAct("del", selArr()); return; }
   if (e.key.startsWith("Arrow") && SEL.size){
     e.preventDefault(); snap();
