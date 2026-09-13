@@ -1,7 +1,7 @@
 # Notebook Portfolio — working notes
 
-A junk-journal notebook that runs as one static page with no build step and no dependencies:
-open `notebook-portfolio.html` and it works.
+A junk-journal notebook that runs as one static page with no dependencies and nothing to
+fetch: open `index.html` and it works.
 
 **Read this before changing anything.** Almost every rule below exists because the obvious
 approach broke the page *silently* — no error in the console, just a control that did nothing
@@ -25,7 +25,7 @@ notebook-portfolio/
 ├── src/
 │   ├── head.html  markup.html  styles.css   the page around the script
 │   ├── order.json                           the load order, and the only copy of it
-│   └── js/01-core.js … 18-boot.js           one concern per file
+│   └── js/01-core.js … 20-photo-and-share.js  one concern per file
 ├── tools/build.js         src/ → index.html, the one page that ships
 ├── tools/check.js         the standing checks
 ├── starters/              notebooks to import and build on
@@ -130,11 +130,39 @@ swallows the drawing. Borders skip it and tile instead. Each border declares `re
 **A doodle is not a sticker.** No fill, no halo, drawn in the current ink colour, so it reads as
 pen on the page rather than something stuck to it.
 
+### Photographs
+
+**A photograph is material.** `SHAPES` cuts it (twelve `clip-path`s), `FX` treats it (nine
+filter stacks), `b.pen[]` holds strokes drawn on it, and `b.zoom`/`b.ox`/`b.oy` crop it by
+moving the picture inside its frame. All of them are readers of one `photoHTML(b)`; the print
+sheets and the standalone copy get them for nothing.
+
+**A cut-out shape and a torn frame are the same slot.** Both are `clip-path`, and an element has
+one. `photoHTML` gives the shape precedence and drops the tear — two `clip-path`s on one element
+means the second silently wins, which looked like the torn frame had stopped working.
+
+**Ink drawn on a photograph is stored in the photograph's own frame**, not in world
+coordinates, so it turns and scales with the picture. `toLocal()` un-rotates a world point into
+that frame; skip it and every stroke lands somewhere else the moment the photo is rotated.
+
+**"Replace" is not what someone with an empty frame is looking for.** The button reads
+**＋ Add my photo** until there is one to replace. The words on a control are part of whether it
+works.
+
 **Torn edges are seeded from the block id** (`torn()` over `rng(hash(id))`). Random each render
 and the tear reshuffles every time you nudge the scrap.
 
 **Every block that shows text must read its own `size`.** `sealHTML` did not, so the control
 appeared to do nothing. If a block has a size field, the renderer uses it.
+
+**A frame drawn round words is sized in `em`, and the box grows with the type.** A stamp's
+perforations, a date's border, a seal's disc were all fixed pixel values, so turning the type up
+pushed the letters straight through the edge and every change meant resizing the piece by hand.
+The CSS is now `em`-relative with the root size set on the block, and `HUGS` / `HUGS_H` name the
+kinds whose box is scaled by the same ratio when `size` changes — `HUGS` both ways, `HUGS_H`
+height only, because a quote band or an hour column keeps the width it was pulled to. `DEF_SIZE`
+holds each kind's default, because the ratio is measured against the size the block *had*, and a
+block that never set one has none to measure from.
 
 ### Type
 
@@ -226,5 +254,7 @@ Ask her to **save before requesting changes**, so the merge picks up her latest.
 - Rich text inside a block — bold and italic are per block today.
 - A back cover that knows it is the back, so Read mode can end on it.
 - Grouping pieces, so an arrangement can be moved as one.
-- Page templates — a page you can stamp out repeatedly, distinct from a stencil.
-- Photo cropping and a focal point; the photograph's own aspect drives the frame today.
+- Cutting one photograph out of another — masking by a shape works, lassoing a subject does not.
+- Filters are CSS stacks, so they cannot do anything per-region: no dodging, no local warmth.
+- Templates keep pieces, paper, size and stencil; they do not keep the page's *name* pattern,
+  so a template cannot say "call me the ISO date and nothing else".

@@ -29,6 +29,9 @@ You put pieces exactly where you want them, on a spread that behaves like an ope
   you like anywhere: front, back, between sections.
 - **Thirty-one kinds of thing to put down**, from a photograph to a wax seal. Everything drags,
   resizes, rotates, layers and locks.
+- **Photographs are material, not attachments.** Crop them by dragging the picture inside its
+  frame, cut them to twelve shapes, put a border round them, treat them (black and white,
+  bleached, night), and draw on them. A collage, not a slot.
 - **Type as a system.** Ten kits, eight roles. Change the kit and every header, caption and
   label in the notebook restyles together.
 - **A stencil layer** you can make from your own arrangement and reuse on any page — shaded,
@@ -41,15 +44,19 @@ You put pieces exactly where you want them, on a spread that behaves like an ope
 | | |
 |---|---|
 | **Written** | text in eight roles, sticky notes, quote bands, checklists you tick on the page |
-| **Pictures** | photographs with no frame, a mat, a polaroid or a torn edge; postcards |
+| **Pictures** | photographs with no frame, a mat, a polaroid or a torn edge — cropped, cut to shape, bordered, treated and drawn on; postcards |
 | **Drawn** | pen and marker — each stroke its own object; 28 doodles in your ink colour |
 | **Ephemera** | paper scraps with seeded torn edges, tags, tickets, postage stamps, envelopes, library cards, wax seals, paper clips, lace trim, ribbon, washi tape, stitch lines |
 | **Planner** | date stamps in 9 formats × 8 styles, hour columns, little months, habit grids, mood and weather rows, star ratings |
-| **Stickers** | 87 across nine drawers — Holidays, Effects, Landmarks, Travel, Nature, Desk, Food, Feelings, Life — plus stretching and repeating Borders |
+| **Stickers** | 113 across thirteen drawers — Holidays, Effects, Landmarks, Travel, Nature, Desk, Food, Feelings, Life, Collage, Faces, Pretty — plus stretching and repeating Borders |
 | **Reference** | spec tables, material swatches, shapes and frames |
 
 Washi tape and borders are sized in pixels, not stretched: **pull a longer piece and you get
 more of the pattern**, at the right weight, with the torn bite the same size at both ends.
+
+**Anything with words in it has a text size.** A stamp, a seal, a ticket, a tag, a library
+card — the frame round the words is drawn in `em`, so setting the type bigger grows the box
+with it instead of leaving the letters hanging off the edge.
 
 ## How it fits together
 
@@ -72,8 +79,8 @@ about.
 ## Where things live
 
 The published page **has** to be one file — it saves itself by rewriting its own source, so
-there is nothing to fetch alongside it. So `src/` is the source and
-`notebook-portfolio.html` is built from it and committed.
+there is nothing to fetch alongside it. So `src/` is the source, and the two built files are
+generated from it and committed.
 
 | File | What it owns |
 |---|---|
@@ -97,6 +104,8 @@ there is nothing to fetch alongside it. So `src/` is the source and
 | `src/js/14-sections-and-pages.js` | sections, pages, re-ordering, covers |
 | `src/js/15-reading-mode.js`, `16-help.js` | Read mode and the shortcut sheet |
 | `src/js/17-save.js`, `18-boot.js` | publishing, exporting, startup |
+| `src/js/19-local-and-templates.js` | keeping it in the browser, IndexedDB photographs, page templates |
+| `src/js/20-photo-and-share.js` | cropping, cut-out shapes, treatments, drawing on a photo, the Export menu, the collage stickers |
 
 Every file shares one global scope and nothing is imported. `src/order.json` is the load order
 and the only place it is written down: at load time a file may touch only what an earlier one
@@ -105,7 +114,7 @@ has defined; calls happen later and may go anywhere.
 ## Working on it
 
 ```bash
-npm run build     # src/ → notebook-portfolio.html
+npm run build     # src/ → index.html and artifact/page.html
 npm run check     # the standing checks
 npm start         # python3 -m http.server 8732
 ```
@@ -174,7 +183,16 @@ them. Importing replaces what is open — export first if you want to keep it.
   It opens in any browser as a reader, turns pages, and prints. It is the same page with a
   read-only flag, so it cannot drift from what you made.
 
-Both let you tick which sections and pages go in.
+Both let you tick which sections and pages go in. They live behind **⇪ Export ▾** on the tool
+rail, alongside **Export notebook JSON** and **Import** — it used to be buried in the `?` sheet,
+which is not where anyone looks for it.
+
+## Pages you make every day
+
+**+ Today** stamps out a dated page. Lay one out the way you like it, then **▤ Template ▾ →
+Keep this page as a template**, and set it as what **+ Today** uses: every new day comes out in
+your own layout with the date already right. Any date stamp on a stamped-out page is re-dated
+to the day it was stamped, not the day the template was drawn.
 
 ## Not built yet
 
