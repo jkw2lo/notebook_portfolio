@@ -2,7 +2,7 @@
   "url": "https://jkw2lo.github.io/notebook_portfolio/",
   "shots": [
     {
-      "file": "desktop.png",
+      "file": "desktop.jpg",
       "settle": 1500,
       "steps": [
         "eval:localStorage.setItem('pb.draft', await (await fetch('starters/travel-journal.json')).text())",
@@ -11,7 +11,7 @@
       ]
     },
     {
-      "file": "kept.png",
+      "file": "kept.jpg",
       "settle": 1500,
       "scale": 2,
       "size": [
@@ -27,7 +27,7 @@
       "pad": 0
     },
     {
-      "file": "field.png",
+      "file": "field.jpg",
       "settle": 1500,
       "scale": 2,
       "size": [

@@ -30,7 +30,7 @@
         "A stencil layer you can save and reuse on any page"
       ],
       "screen": {
-        "src": "kept.png",
+        "src": "kept.jpg",
         "alt": "A kraft-paper page with a postage stamp, a tag, a receipt envelope, a postcard and stickers of a torii gate, a ramen bowl and a compass"
       }
     },
@@ -43,7 +43,7 @@
         "8 papers, from graph and dot to aged, set page by page"
       ],
       "screen": {
-        "src": "field.png",
+        "src": "field.jpg",
         "alt": "A two-page field notes spread: graph paper with an hour column, habit grid and checklist on the left, dot paper with a drawing area and photo frame on the right"
       }
     },
@@ -66,7 +66,7 @@
   ],
   "screens": [
     {
-      "src": "desktop.png",
+      "src": "desktop.jpg",
       "alt": "Notebook Portfolio's editor showing a travel journal page with a date stamp, a ticket, a taped photo frame, a sticky note and a plane sticker",
       "caption": "A page from the travel journal starter"
     }
