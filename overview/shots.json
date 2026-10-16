@@ -1,0 +1,46 @@
+{
+  "url": "https://jkw2lo.github.io/notebook_portfolio/",
+  "shots": [
+    {
+      "file": "desktop.png",
+      "settle": 1500,
+      "steps": [
+        "eval:localStorage.setItem('pb.draft', await (await fetch('starters/travel-journal.json')).text())",
+        "reload",
+        "click:#pagelist .prow[data-pi='1']"
+      ]
+    },
+    {
+      "file": "kept.png",
+      "settle": 1500,
+      "scale": 2,
+      "size": [
+        1280,
+        820
+      ],
+      "steps": [
+        "eval:localStorage.setItem('pb.draft', await (await fetch('starters/travel-journal.json')).text())",
+        "reload",
+        "click:#pagelist .prow[data-pi='2']"
+      ],
+      "clip": "#pages .pg",
+      "pad": 0
+    },
+    {
+      "file": "field.png",
+      "settle": 1500,
+      "scale": 2,
+      "size": [
+        1280,
+        820
+      ],
+      "steps": [
+        "eval:localStorage.setItem('pb.draft', await (await fetch('starters/field-notes.json')).text())",
+        "reload",
+        "click:#pagelist .prow[data-pi='1']"
+      ],
+      "clip": "#pages .pg",
+      "pad": 0
+    }
+  ]
+}
